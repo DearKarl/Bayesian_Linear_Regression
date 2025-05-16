@@ -52,4 +52,5 @@ This repository contains a comprehensive R implementation and analysis of Bayesi
   - Bootstrapped simulations to calculate bias, variance, and MSE for different τ² values
   - Comprehensive visualization of bias-variance trade-off
 
+
 © 2024 Karl Meng. All rights reserved.
