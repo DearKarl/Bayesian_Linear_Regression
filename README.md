@@ -2,10 +2,54 @@
 
 This repository provides a complete set of R scripts and analyses demonstrating Bayesian Linear Regression on the Boston Housing dataset.
 
-## Features
-- **Data Loading & Cleaning**: Handles missing values via mean imputation.
-- **Model Construction**: Implements Gibbs sampling for posterior inference of coefficients (β) and variance (σ<sup>2</sup>).
-- **Prediction & Evaluation**: Shows how to generate predictive distributions, compute credible intervals, and evaluate RMSE.
-- **Hyperparameter Tuning**: Explores the impact of different prior variances (τ<sup>2</sup>) and training set sizes.
-- **Bias-Variance Analysis**: Performs simulations to visualize how τ<sup>2</sup> affects the bias-variance trade-off.
-- **Plots & Visualizations**: Includes charts for posterior intervals, residual distributions, and predicted vs. actual values.
+## Key Features
+
+### Data Loading and Preprocessing
+
+- **Dataset**: Boston Housing Dataset
+- **Data Inspection and Cleaning**:
+  - Missing values are handled using mean imputation.
+  - Dataset is divided into training (80%), validation (10%), and test (10%) sets.
+
+### Bayesian Linear Regression Implementation
+
+- **Gibbs Sampling**:
+  - Bayesian inference using Gibbs sampling (MCMC) for posterior distributions
+  - Sampling regression coefficients (β) and residual variance (σ²)
+  - Calculation of posterior means, covariance matrices, and credible intervals
+
+### Prediction and Uncertainty Quantification
+
+- **Posterior Predictive Distributions**:
+  - Prediction function leveraging posterior samples of coefficients and variance
+  - Calculation of predictive means and 95% credible intervals
+
+- **Visualization**:
+  - Regression coefficient credible intervals
+  - Comparison between predicted and actual housing prices
+  - Residual analysis (residuals vs predicted values, residual distribution histograms)
+
+### Hyperparameter Exploration
+
+- **Training Set Size**:
+  - RMSE analysis for varying proportions of training data (20%–80%)
+  - Visualization of optimal training proportion based on validation RMSE
+
+- **Prior Variance (τ²) Impact**:
+  - RMSE analysis across varying prior variances (τ²: 0.01, 0.1, 1, 10, 100, 1000)
+  - Optimal hyperparameter determination based on validation and test RMSE
+
+### Cross-Validation Analysis
+
+- **K-Fold Cross-Validation**:
+  - 5-fold cross-validation to systematically evaluate model robustness
+  - RMSE analysis across varying prior variances
+  - Visualization of cross-validation performance relative to hyperparameter settings
+
+### Bias-Variance Trade-Off
+
+- **Simulation-Based Analysis**:
+  - Bootstrapped simulations to calculate bias, variance, and MSE for different τ² values
+  - Comprehensive visualization of bias-variance trade-off
+
+© 2024 Karl Meng. All rights reserved.
