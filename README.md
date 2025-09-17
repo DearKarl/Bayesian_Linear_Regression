@@ -1,4 +1,4 @@
-# Bayesian-Linear-Regression
+# Bayesian Linear Regression
 
 This repository contains a comprehensive R implementation and analysis of Bayesian Linear Regression applied to the Boston Housing dataset. The analysis demonstrates the Bayesian approach, including posterior inference, hyperparameter tuning, model performance evaluation, and a detailed exploration of bias-variance trade-offs.
 
