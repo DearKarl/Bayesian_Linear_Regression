@@ -1,4 +1,5 @@
 # Bayesian Linear Regression
+### Bayesian Linear Regression Analysis: Comprehensive Study of Principles, Hyperparameter Tuning and Model Performance   
 
 This repository contains a comprehensive R implementation and analysis of Bayesian linear regression applied to the Boston Housing dataset. The analysis demonstrates the Bayesian approach, including posterior inference, hyperparameter tuning, model performance evaluation, and a detailed exploration of bias-variance trade-offs.
 
