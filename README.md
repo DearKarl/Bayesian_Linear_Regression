@@ -21,42 +21,45 @@ Bayesian linear regression is suited to scenarios where uncertainty quantificati
   \[
   \beta \sim \mathcal{N}(\beta_0, V_0), \quad \sigma^2 \sim \text{Inv-Gamma}(a_0, b_0).
   \]  
-  Here, \( \beta \) denotes the regression coefficients, \( V_0 = \tau^2 I \) the prior covariance, and \( \sigma^2 \) the residual variance.  
+  Here, \( \beta \) denotes the regression coefficients, \( V_0 = \tau^2 I \) the prior covariance matrix, and \( \sigma^2 \) the residual variance.  
 
 - **Inference**:  
-  Posterior distributions are estimated via Gibbs sampling (MCMC). The algorithm iteratively samples from conditional distributions of \( \beta \) and \( \sigma^2 \), generating posterior draws. Posterior means and 95% credible intervals are used for statistical inference and feature interpretation.  
+  Posterior distributions are estimated via Gibbs sampling (MCMC). The sampler alternates between:  
+  1. Sampling \( \beta \) from its multivariate normal conditional posterior, and  
+  2. Sampling \( \sigma^2 \) from its inverse-gamma conditional posterior.  
+  After discarding burn-in iterations, posterior means and 95% credible intervals are computed for parameter inference.  
 
 - **Prediction and Uncertainty Quantification**:  
-  Posterior predictive distributions are computed using sampled parameters. Predictive means and 95% credible intervals are reported, providing interval forecasts that account for both model and parameter uncertainty.  
+  Posterior predictive distributions are obtained by combining posterior draws of \( \beta \) and \( \sigma^2 \). For each test point, predictive means and 95% credible intervals are reported, reflecting both parameter and residual uncertainty.  
 
 - **Evaluation**:  
-  - Root Mean Squared Error (RMSE) is used as the primary evaluation metric:  
+  - Root Mean Squared Error (RMSE) is used as the primary performance metric:  
     \[
     \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2}.
     \]  
-  - Residual diagnostics (residuals vs. fitted plots, residual histograms) are applied to validate assumptions of linearity, homoscedasticity, and normality of errors.  
+  - Residual diagnostics are employed, including residuals vs. predicted values and residual histograms, to assess model fit and validate regression assumptions.  
 
-- **Hyperparameters**:  
-  The prior covariance parameter is defined as \( V_0 = \tau^2 I \).  
-  Sensitivity analysis is conducted by exploring a range of prior variances:  
+- **Hyperparameter Analysis**:  
+  The prior covariance parameter is set as \( V_0 = \tau^2 I \). Sensitivity analysis is conducted across:  
   \[
   \tau^2 \in \{0.01, 0.1, 1, 10, 100, 1000\}.
   \]  
-  This allows investigation of how regularisation strength influences predictive performance.  
+  RMSE trends are evaluated for both training and validation sets to identify the optimal degree of prior regularisation.  
 
 - **Validation Schemes**:  
-  - **Hold-out validation**: Data are split into training (80%), validation (10%), and test (10%) sets with fixed random seeds for reproducibility.  
-  - **Cross-validation**: 5-fold cross-validation is applied across different prior variances (\( \tau^2 \)) to reduce sensitivity to specific data partitions and ensure robust model selection.  
+  - **Training set size experiments**: RMSE is evaluated for training proportions ranging from 20% to 80%, illustrating the impact of dataset size on model performance.  
+  - **Hold-out validation**: Data are split into training (80%), validation (10%), and test (10%) sets with a fixed random seed for reproducibility.  
+  - **Cross-validation**: 5-fold cross-validation is performed for different \( \tau^2 \) values, and mean RMSE across folds is used for robust hyperparameter selection.  
 
 - **Bias–Variance Analysis**:  
-  Bootstrap simulations (50 replications per prior setting) are conducted to decompose mean squared error (MSE) into bias², variance, and irreducible noise:  
+  For each \( \tau^2 \), 50 bootstrap simulations are run on the training data. For each resample, the posterior mean estimates of \( \beta \) are used to predict the validation set. The mean squared error (MSE) is then decomposed into:  
   \[
-  \text{MSE} = \text{Bias}^2 + \text{Variance} + \sigma^2_{\text{noise}}.
+  \text{MSE} = \text{Bias}^2 + \text{Variance},
   \]  
-  This analysis reveals how different levels of prior variance (\( \tau^2 \)) balance model flexibility (variance) against underfitting (bias).  
+  where Bias² captures systematic underfitting and Variance captures instability across simulations. This analysis highlights the trade-off between bias and variance as prior variance changes.  
 
 - **Robustness Considerations**:  
-  Further experiments assess performance under small training sets and imbalanced data distributions. Priors provide regularisation and mitigate instability, while credible intervals reflect increased uncertainty under limited or skewed data.  
+  The experiments include varying the training set size to simulate limited data availability. Results show that Bayesian priors provide regularisation and help stabilise parameter estimates under small-sample conditions.  
 
 ## Key Features  
 
@@ -64,7 +67,7 @@ Bayesian linear regression is suited to scenarios where uncertainty quantificati
 - **Uncertainty-Aware Modelling**: Beyond point estimates, the model quantifies predictive uncertainty via posterior distributions and credible intervals, providing probabilistic insights into feature effects and forecasts.  
 - **Hyperparameter Study**: Thorough evaluation of prior variance (τ²) and training set proportions, showing their impact on predictive performance and generalisation.  
 - **Robust Model Validation**: Both hold-out validation and k-fold cross-validation are employed, reducing variance from a single split and ensuring reliable hyperparameter selection.  
-- **Bias–Variance Decomposition**: Simulation-based analysis explicitly disentangles bias, variance, and irreducible error, highlighting the trade-off that governs predictive performance in Bayesian regression.  
+- **Bias–Variance Decomposition**: Bootstrapped simulations quantify how prior variance (τ²) influences the balance between bias and variance, identifying the regime that minimises prediction error.
 
 ## Data Sources
 
