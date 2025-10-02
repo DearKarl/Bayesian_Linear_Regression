@@ -20,8 +20,8 @@ Bayesian linear regression is suited to scenarios where uncertainty quantificati
 
 - **Inference**  
   Posterior distributions are estimated via Gibbs sampling (MCMC), alternating between:  
-  1) sampling β from the multivariate normal conditional posterior, and  
-  2) sampling σ² from the inverse-gamma conditional posterior.  
+  - sampling β from the multivariate normal conditional posterior, and  
+  - sampling σ² from the inverse-gamma conditional posterior.  
   After discarding burn-in iterations, posterior means and 95% credible intervals are used for parameter inference.  
 
 - **Prediction and Uncertainty Quantification**  
