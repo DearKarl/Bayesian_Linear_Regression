@@ -1,6 +1,6 @@
 # Bayesian Linear Regression Analysis
 
-Comprehensive Study of Principles, Hyperparameter Tuning, and Model Performance
+A comprehensive analysis of Bayesian linear regression study on the Boston Housing Dataset, focusing on hyperparameters, bias–variance trade-offs, and model robustness.
 
 ## Project Overview
 
@@ -10,63 +10,67 @@ This repository provides a complete R implementation and empirical study of Baye
 
 Bayesian linear regression is suited to scenarios where uncertainty quantification is essential and prior knowledge can be meaningfully incorporated. Typical applications include housing price prediction, healthcare prognosis, and reliability analysis. By regularising coefficients through priors, the method is robust to multicollinearity and performs reliably on relatively small datasets while retaining interpretability through posterior summaries and credible intervals.
 
-## Key Features
+## Methodology  
 
-### Data Loading and Preprocessing
+- **Model**:  
+  We consider the Bayesian linear regression model:  
+  \[
+  y \mid X, \beta, \sigma^2 \sim \mathcal{N}(X\beta, \sigma^2 I),
+  \]
+  with priors  
+  \[
+  \beta \sim \mathcal{N}(\beta_0, V_0), \quad \sigma^2 \sim \text{Inv-Gamma}(a_0, b_0).
+  \]  
+  Here, \( \beta \) denotes the regression coefficients, \( V_0 = \tau^2 I \) the prior covariance, and \( \sigma^2 \) the residual variance.  
 
-- **Dataset**: Boston Housing Dataset
-- **Data Inspection and Cleaning**:
-  - Missing values are handled using mean imputation.
-  - Dataset is divided into training (80%), validation (10%), and test (10%) sets.
+- **Inference**:  
+  Posterior distributions are estimated via Gibbs sampling (MCMC). The algorithm iteratively samples from conditional distributions of \( \beta \) and \( \sigma^2 \), generating posterior draws. Posterior means and 95% credible intervals are used for statistical inference and feature interpretation.  
 
-### Bayesian Linear Regression Implementation
+- **Prediction and Uncertainty Quantification**:  
+  Posterior predictive distributions are computed using sampled parameters. Predictive means and 95% credible intervals are reported, providing interval forecasts that account for both model and parameter uncertainty.  
 
-- **Gibbs Sampling**:
-  - Bayesian inference using Gibbs sampling (MCMC) for posterior distributions
-  - Sampling regression coefficients (β) and residual variance (σ²)
-  - Calculation of posterior means, covariance matrices, and credible intervals
+- **Evaluation**:  
+  - Root Mean Squared Error (RMSE) is used as the primary evaluation metric:  
+    \[
+    \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2}.
+    \]  
+  - Residual diagnostics (residuals vs. fitted plots, residual histograms) are applied to validate assumptions of linearity, homoscedasticity, and normality of errors.  
 
-### Prediction and Uncertainty Quantification
+- **Hyperparameters**:  
+  The prior covariance parameter is defined as \( V_0 = \tau^2 I \).  
+  Sensitivity analysis is conducted by exploring a range of prior variances:  
+  \[
+  \tau^2 \in \{0.01, 0.1, 1, 10, 100, 1000\}.
+  \]  
+  This allows investigation of how regularisation strength influences predictive performance.  
 
-- **Posterior Predictive Distributions**:
-  - Prediction function leveraging posterior samples of coefficients and variance
-  - Calculation of predictive means and 95% credible intervals
+- **Validation Schemes**:  
+  - **Hold-out validation**: Data are split into training (80%), validation (10%), and test (10%) sets with fixed random seeds for reproducibility.  
+  - **Cross-validation**: 5-fold cross-validation is applied across different prior variances (\( \tau^2 \)) to reduce sensitivity to specific data partitions and ensure robust model selection.  
 
-- **Visualization**:
-  - Regression coefficient credible intervals
-  - Comparison between predicted and actual housing prices
-  - Residual analysis (residuals vs predicted values, residual distribution histograms)
+- **Bias–Variance Analysis**:  
+  Bootstrap simulations (50 replications per prior setting) are conducted to decompose mean squared error (MSE) into bias², variance, and irreducible noise:  
+  \[
+  \text{MSE} = \text{Bias}^2 + \text{Variance} + \sigma^2_{\text{noise}}.
+  \]  
+  This analysis reveals how different levels of prior variance (\( \tau^2 \)) balance model flexibility (variance) against underfitting (bias).  
 
-### Hyperparameter Exploration
+- **Robustness Considerations**:  
+  Further experiments assess performance under small training sets and imbalanced data distributions. Priors provide regularisation and mitigate instability, while credible intervals reflect increased uncertainty under limited or skewed data.  
 
-- **Training Set Size**:
-  - RMSE analysis for varying proportions of training data (20%–80%)
-  - Visualization of optimal training proportion based on validation RMSE
+## Key Features  
 
-- **Prior Variance (τ²) Impact**:
-  - RMSE analysis across varying prior variances (τ²: 0.01, 0.1, 1, 10, 100, 1000)
-  - Optimal hyperparameter determination based on validation and test RMSE
-
-### Cross-Validation Analysis
-
-- **K-Fold Cross-Validation**:
-  - 5-fold cross-validation to systematically evaluate model robustness
-  - RMSE analysis across varying prior variances
-  - Visualization of cross-validation performance relative to hyperparameter settings
-
-### Bias-Variance Trade-Off
-
-- **Simulation-Based Analysis**:
-  - Bootstrapped simulations to calculate bias, variance, and MSE for different τ² values
-  - Comprehensive visualization of bias-variance trade-off
+- **Bayesian Framework**: A pipeline from data preprocessing to posterior inference, prediction, and model evaluation, ensuring reproducibility and interpretability throughout.  
+- **Uncertainty-Aware Modelling**: Beyond point estimates, the model quantifies predictive uncertainty via posterior distributions and credible intervals, providing probabilistic insights into feature effects and forecasts.  
+- **Hyperparameter Study**: Thorough evaluation of prior variance (τ²) and training set proportions, showing their impact on predictive performance and generalisation.  
+- **Robust Model Validation**: Both hold-out validation and k-fold cross-validation are employed, reducing variance from a single split and ensuring reliable hyperparameter selection.  
+- **Bias–Variance Decomposition**: Simulation-based analysis explicitly disentangles bias, variance, and irreducible error, highlighting the trade-off that governs predictive performance in Bayesian regression.  
 
 ## Data Sources
 
-- [Boston Housing Dataset (Kaggle)](https://www.kaggle.com/datasets/manimala/boston-house-prices)
-- [Boston Housing (UCI Machine Learning Repository)](https://archive.ics.uci.edu/ml/datasets/housing)
-- Original compilation: Harrison, D., & Rubinfeld, D. L. (1978), based on U.S. Census data
+- [Boston House Prices (Kaggle Dataset by vikrishnan)](https://www.kaggle.com/datasets/vikrishnan/boston-house-prices)  
 
-Data are used for research and educational purposes; please refer to the respective dataset licences and terms of use.
+Data are used for research and educational purposes; please refer to Kaggle’s license and terms of use.
 
 ## References
 
