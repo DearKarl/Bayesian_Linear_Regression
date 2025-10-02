@@ -25,17 +25,16 @@ Bayesian linear regression is suited to scenarios where uncertainty quantificati
   After discarding burn-in iterations, posterior means and 95% credible intervals are used for parameter inference.  
 
 - **Prediction and Uncertainty Quantification**  
-  Posterior predictive distributions are constructed by combining posterior draws of β and σ².  
-  For each test instance, predictive means and 95% credible intervals are reported, incorporating both parameter and residual uncertainty.  
+  - Posterior predictive distributions are constructed by combining posterior draws of β and σ².  
+  - For each test instance, predictive means and 95% credible intervals are reported, incorporating both parameter and residual uncertainty.  
 
 - **Evaluation**  
   - Primary metric: RMSE = √( (1/n) · Σ(yᵢ − ŷᵢ)² )  
   - Residual diagnostics include residuals vs predicted values and residual histograms, assessing linearity, homoscedasticity, and distributional assumptions of errors.  
 
 - **Hyperparameter Analysis**  
-  The prior covariance is defined as V₀ = τ²I. Sensitivity analysis is conducted across  
-  τ² ∈ {0.01, 0.1, 1, 10, 100, 1000}.  
-  RMSE trends for both training and validation sets are analysed to determine the optimal level of prior regularisation.  
+  - The prior covariance is defined as V₀ = τ²I. Sensitivity analysis is conducted across τ² ∈ {0.01, 0.1, 1, 10, 100, 1000}.  
+  - RMSE trends for both training and validation sets are analysed to determine the optimal level of prior regularisation.  
 
 - **Validation Schemes**  
   - **Training-set size experiments**: RMSE is computed for training proportions ranging from 20% to 80%.  
@@ -43,12 +42,9 @@ Bayesian linear regression is suited to scenarios where uncertainty quantificati
   - **Cross-validation**: 5-fold CV is applied for different τ² values, and mean CV-RMSE is reported for robust hyperparameter selection.  
 
 - **Bias–Variance Analysis**  
-  For each τ², 50 bootstrap simulations are executed on the training data.  
-  In each resample, the model is fitted and posterior mean estimates of β are used to predict the validation set.  
-  The mean squared error (MSE) is then decomposed as:  
-  MSE = Bias² + Variance  
-  where Bias² measures systematic error relative to the true value and Variance reflects instability across simulations.  
-  This analysis highlights the trade-off between bias and variance under different values of τ².  
+  - For each τ², 50 bootstrap simulations are executed on the training data. In each resample, the model is fitted and posterior mean estimates of β are used to predict the        validation set.  
+  - The mean squared error (MSE) is then decomposed as: MSE = Bias² + Variance
+    where Bias² measures systematic error relative to the true value and Variance reflects instability across simulations.  
 
 - **Robustness Considerations**  
   Experiments varying training-set size are included to simulate limited data scenarios. The results indicate that Bayesian priors introduce regularisation and improve the       stability of parameter estimates under small-sample conditions.
