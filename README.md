@@ -10,56 +10,48 @@ This repository provides a complete R implementation and empirical study of Baye
 
 Bayesian linear regression is suited to scenarios where uncertainty quantification is essential and prior knowledge can be meaningfully incorporated. Typical applications include housing price prediction, healthcare prognosis, and reliability analysis. By regularising coefficients through priors, the method is robust to multicollinearity and performs reliably on relatively small datasets while retaining interpretability through posterior summaries and credible intervals.
 
-## Methodology  
+## Methodology
 
-- **Model**:  
-  We consider the Bayesian linear regression model:  
-  \[
-  y \mid X, \beta, \sigma^2 \sim \mathcal{N}(X\beta, \sigma^2 I),
-  \]
-  with priors  
-  \[
-  \beta \sim \mathcal{N}(\beta_0, V_0), \quad \sigma^2 \sim \text{Inv-Gamma}(a_0, b_0).
-  \]  
-  Here, \( \beta \) denotes the regression coefficients, \( V_0 = \tau^2 I \) the prior covariance matrix, and \( \sigma^2 \) the residual variance.  
+- **Model**  
+  The Bayesian linear regression model is specified as:  
+  - Likelihood: *y | X, β, σ² ~ Normal(Xβ, σ²I)*  
+  - Priors: *β ~ Normal(β₀, V₀)*, *σ² ~ Inv-Gamma(a₀, b₀)*  
+  - Notation: β denotes regression coefficients, V₀ = τ²I is the prior covariance matrix, and σ² is the residual variance.  
 
-- **Inference**:  
-  Posterior distributions are estimated via Gibbs sampling (MCMC). The sampler alternates between:  
-  1. Sampling \( \beta \) from its multivariate normal conditional posterior, and  
-  2. Sampling \( \sigma^2 \) from its inverse-gamma conditional posterior.  
-  After discarding burn-in iterations, posterior means and 95% credible intervals are computed for parameter inference.  
+- **Inference**  
+  Posterior distributions are estimated via Gibbs sampling (MCMC), alternating between:  
+  1) sampling β from the multivariate normal conditional posterior, and  
+  2) sampling σ² from the inverse-gamma conditional posterior.  
+  After discarding burn-in iterations, posterior means and 95% credible intervals are used for parameter inference.  
 
-- **Prediction and Uncertainty Quantification**:  
-  Posterior predictive distributions are obtained by combining posterior draws of \( \beta \) and \( \sigma^2 \). For each test point, predictive means and 95% credible intervals are reported, reflecting both parameter and residual uncertainty.  
+- **Prediction and Uncertainty Quantification**  
+  Posterior predictive distributions are constructed by combining posterior draws of β and σ².  
+  For each test instance, predictive means and 95% credible intervals are reported, incorporating both parameter and residual uncertainty.  
 
-- **Evaluation**:  
-  - Root Mean Squared Error (RMSE) is used as the primary performance metric:  
-    \[
-    \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2}.
-    \]  
-  - Residual diagnostics are employed, including residuals vs. predicted values and residual histograms, to assess model fit and validate regression assumptions.  
+- **Evaluation**  
+  - Primary metric: RMSE = √( (1/n) · Σ(yᵢ − ŷᵢ)² )  
+  - Residual diagnostics include residuals vs predicted values and residual histograms, assessing linearity, homoscedasticity, and distributional assumptions of errors.  
 
-- **Hyperparameter Analysis**:  
-  The prior covariance parameter is set as \( V_0 = \tau^2 I \). Sensitivity analysis is conducted across:  
-  \[
-  \tau^2 \in \{0.01, 0.1, 1, 10, 100, 1000\}.
-  \]  
-  RMSE trends are evaluated for both training and validation sets to identify the optimal degree of prior regularisation.  
+- **Hyperparameter Analysis**  
+  The prior covariance is defined as V₀ = τ²I. Sensitivity analysis is conducted across  
+  τ² ∈ {0.01, 0.1, 1, 10, 100, 1000}.  
+  RMSE trends for both training and validation sets are analysed to determine the optimal level of prior regularisation.  
 
-- **Validation Schemes**:  
-  - **Training set size experiments**: RMSE is evaluated for training proportions ranging from 20% to 80%, illustrating the impact of dataset size on model performance.  
-  - **Hold-out validation**: Data are split into training (80%), validation (10%), and test (10%) sets with a fixed random seed for reproducibility.  
-  - **Cross-validation**: 5-fold cross-validation is performed for different \( \tau^2 \) values, and mean RMSE across folds is used for robust hyperparameter selection.  
+- **Validation Schemes**  
+  - **Training-set size experiments**: RMSE is computed for training proportions ranging from 20% to 80%.  
+  - **Hold-out validation**: Data are partitioned into 80%/10%/10% train/validation/test splits with fixed random seeds.  
+  - **Cross-validation**: 5-fold CV is applied for different τ² values, and mean CV-RMSE is reported for robust hyperparameter selection.  
 
-- **Bias–Variance Analysis**:  
-  For each \( \tau^2 \), 50 bootstrap simulations are run on the training data. For each resample, the posterior mean estimates of \( \beta \) are used to predict the validation set. The mean squared error (MSE) is then decomposed into:  
-  \[
-  \text{MSE} = \text{Bias}^2 + \text{Variance},
-  \]  
-  where Bias² captures systematic underfitting and Variance captures instability across simulations. This analysis highlights the trade-off between bias and variance as prior variance changes.  
+- **Bias–Variance Analysis**  
+  For each τ², 50 bootstrap simulations are executed on the training data.  
+  In each resample, the model is fitted and posterior mean estimates of β are used to predict the validation set.  
+  The mean squared error (MSE) is then decomposed as:  
+  MSE = Bias² + Variance  
+  where Bias² measures systematic error relative to the true value and Variance reflects instability across simulations.  
+  This analysis highlights the trade-off between bias and variance under different values of τ².  
 
-- **Robustness Considerations**:  
-  The experiments include varying the training set size to simulate limited data availability. Results show that Bayesian priors provide regularisation and help stabilise parameter estimates under small-sample conditions.  
+- **Robustness Considerations**  
+  Experiments varying training-set size are included to simulate limited data scenarios. The results indicate that Bayesian priors introduce regularisation and improve the       stability of parameter estimates under small-sample conditions.
 
 ## Key Features  
 
