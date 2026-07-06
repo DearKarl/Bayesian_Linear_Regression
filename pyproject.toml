@@ -1,0 +1,29 @@
+[project]
+name = "bayesian-linear-regression-boston"
+version = "0.1.0"
+description = "Pure-Python research benchmark for ordinary and Bayesian linear regression on the Boston Housing dataset."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Karl Meng" }
+]
+dependencies = [
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "scikit-learn>=1.4",
+  "scipy>=1.11",
+  "seaborn>=0.13"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
