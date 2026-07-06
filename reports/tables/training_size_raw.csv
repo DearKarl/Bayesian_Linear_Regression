@@ -1,0 +1,281 @@
+model,train_fraction,repeat,rmse
+Ordinary least squares,0.2,0,5.076255607903475
+Bayesian Gibbs,0.2,0,5.081558855787294
+Ordinary least squares,0.2,1,4.947234604783857
+Bayesian Gibbs,0.2,1,4.866384217981236
+Ordinary least squares,0.2,2,5.457657436783738
+Bayesian Gibbs,0.2,2,5.41894185015557
+Ordinary least squares,0.2,3,5.346353790792629
+Bayesian Gibbs,0.2,3,5.270512707348598
+Ordinary least squares,0.2,4,5.472077188784231
+Bayesian Gibbs,0.2,4,5.411125827498845
+Ordinary least squares,0.2,5,5.869854334869485
+Bayesian Gibbs,0.2,5,5.832894218901026
+Ordinary least squares,0.2,6,5.334514664055528
+Bayesian Gibbs,0.2,6,5.273074350284644
+Ordinary least squares,0.2,7,5.993104490700126
+Bayesian Gibbs,0.2,7,5.901742595689092
+Ordinary least squares,0.2,8,5.45222503483796
+Bayesian Gibbs,0.2,8,5.424541989239286
+Ordinary least squares,0.2,9,5.277287318634761
+Bayesian Gibbs,0.2,9,5.265256694445149
+Ordinary least squares,0.2,10,5.260812153071265
+Bayesian Gibbs,0.2,10,5.212397478108044
+Ordinary least squares,0.2,11,5.273566068274094
+Bayesian Gibbs,0.2,11,5.321484057837694
+Ordinary least squares,0.2,12,5.455128134789957
+Bayesian Gibbs,0.2,12,5.435850170077164
+Ordinary least squares,0.2,13,5.466735063201947
+Bayesian Gibbs,0.2,13,5.386793783743739
+Ordinary least squares,0.2,14,5.02574100575008
+Bayesian Gibbs,0.2,14,4.993539664004286
+Ordinary least squares,0.2,15,5.187414442711465
+Bayesian Gibbs,0.2,15,5.204309107712504
+Ordinary least squares,0.2,16,5.457302225146128
+Bayesian Gibbs,0.2,16,5.426431984178501
+Ordinary least squares,0.2,17,5.328440298010233
+Bayesian Gibbs,0.2,17,5.029047997902906
+Ordinary least squares,0.2,18,5.278638148285211
+Bayesian Gibbs,0.2,18,5.20234062710619
+Ordinary least squares,0.2,19,5.258976754597803
+Bayesian Gibbs,0.2,19,5.13848497385621
+Ordinary least squares,0.3,0,5.197430202647848
+Bayesian Gibbs,0.3,0,5.172614375285898
+Ordinary least squares,0.3,1,5.604612257092263
+Bayesian Gibbs,0.3,1,5.60635153744492
+Ordinary least squares,0.3,2,5.002023019186213
+Bayesian Gibbs,0.3,2,5.004974602251832
+Ordinary least squares,0.3,3,5.011033419551602
+Bayesian Gibbs,0.3,3,5.002173852343011
+Ordinary least squares,0.3,4,5.21574563002324
+Bayesian Gibbs,0.3,4,5.183002820785472
+Ordinary least squares,0.3,5,5.084464082083719
+Bayesian Gibbs,0.3,5,5.0575862227782835
+Ordinary least squares,0.3,6,5.072896766239395
+Bayesian Gibbs,0.3,6,5.082891866569638
+Ordinary least squares,0.3,7,5.062843429820899
+Bayesian Gibbs,0.3,7,5.07115992244998
+Ordinary least squares,0.3,8,5.415864635573231
+Bayesian Gibbs,0.3,8,5.4022024661164805
+Ordinary least squares,0.3,9,5.010586973439314
+Bayesian Gibbs,0.3,9,4.914013832799112
+Ordinary least squares,0.3,10,4.865441943652947
+Bayesian Gibbs,0.3,10,4.859150790344563
+Ordinary least squares,0.3,11,5.276775650092583
+Bayesian Gibbs,0.3,11,5.250283428152941
+Ordinary least squares,0.3,12,5.337405599130685
+Bayesian Gibbs,0.3,12,5.334767596668935
+Ordinary least squares,0.3,13,4.745975629714534
+Bayesian Gibbs,0.3,13,4.728848099705699
+Ordinary least squares,0.3,14,5.032991642815631
+Bayesian Gibbs,0.3,14,5.012891988177681
+Ordinary least squares,0.3,15,5.173920074203877
+Bayesian Gibbs,0.3,15,5.0223498121063
+Ordinary least squares,0.3,16,4.814346570179913
+Bayesian Gibbs,0.3,16,4.814721468749194
+Ordinary least squares,0.3,17,5.08938785881651
+Bayesian Gibbs,0.3,17,5.052275092585115
+Ordinary least squares,0.3,18,5.540417706859804
+Bayesian Gibbs,0.3,18,5.527192299158537
+Ordinary least squares,0.3,19,5.250597881624523
+Bayesian Gibbs,0.3,19,5.136318385287156
+Ordinary least squares,0.4,0,5.1843393823136585
+Bayesian Gibbs,0.4,0,5.1609316683716004
+Ordinary least squares,0.4,1,4.892048129131631
+Bayesian Gibbs,0.4,1,4.881057431671775
+Ordinary least squares,0.4,2,4.937381493791688
+Bayesian Gibbs,0.4,2,4.936028562949434
+Ordinary least squares,0.4,3,5.528221458524342
+Bayesian Gibbs,0.4,3,5.503520619596902
+Ordinary least squares,0.4,4,5.088095247679256
+Bayesian Gibbs,0.4,4,5.041409762953135
+Ordinary least squares,0.4,5,5.219580961157714
+Bayesian Gibbs,0.4,5,5.144508345221387
+Ordinary least squares,0.4,6,4.655435713204384
+Bayesian Gibbs,0.4,6,4.663024418268563
+Ordinary least squares,0.4,7,5.2729845693102995
+Bayesian Gibbs,0.4,7,5.280779715973172
+Ordinary least squares,0.4,8,5.354759055600492
+Bayesian Gibbs,0.4,8,5.274022962612988
+Ordinary least squares,0.4,9,4.985488189254955
+Bayesian Gibbs,0.4,9,4.9420516355124935
+Ordinary least squares,0.4,10,5.6531105885426145
+Bayesian Gibbs,0.4,10,5.634672059281349
+Ordinary least squares,0.4,11,4.856489431988843
+Bayesian Gibbs,0.4,11,4.8316602367509285
+Ordinary least squares,0.4,12,5.8196362137609325
+Bayesian Gibbs,0.4,12,5.815186328723437
+Ordinary least squares,0.4,13,4.733867570577586
+Bayesian Gibbs,0.4,13,4.747575370935349
+Ordinary least squares,0.4,14,5.117123366861631
+Bayesian Gibbs,0.4,14,5.111504125741443
+Ordinary least squares,0.4,15,4.8705355905473935
+Bayesian Gibbs,0.4,15,4.871664273219211
+Ordinary least squares,0.4,16,5.410273740066792
+Bayesian Gibbs,0.4,16,5.421515995423444
+Ordinary least squares,0.4,17,4.723606979554138
+Bayesian Gibbs,0.4,17,4.678766657205207
+Ordinary least squares,0.4,18,4.761645613379473
+Bayesian Gibbs,0.4,18,4.763720077962292
+Ordinary least squares,0.4,19,5.503252552982798
+Bayesian Gibbs,0.4,19,5.47419687781876
+Ordinary least squares,0.5,0,5.286281281336806
+Bayesian Gibbs,0.5,0,5.279556159764255
+Ordinary least squares,0.5,1,4.863217801004437
+Bayesian Gibbs,0.5,1,4.845781969261739
+Ordinary least squares,0.5,2,5.166785053469499
+Bayesian Gibbs,0.5,2,5.164462827259671
+Ordinary least squares,0.5,3,5.510839195040444
+Bayesian Gibbs,0.5,3,5.521138026253414
+Ordinary least squares,0.5,4,5.239730876005946
+Bayesian Gibbs,0.5,4,5.172594790565931
+Ordinary least squares,0.5,5,4.670455828989342
+Bayesian Gibbs,0.5,5,4.653045080759595
+Ordinary least squares,0.5,6,5.088183835746329
+Bayesian Gibbs,0.5,6,5.090255851884755
+Ordinary least squares,0.5,7,4.9602008291951085
+Bayesian Gibbs,0.5,7,4.966354401307699
+Ordinary least squares,0.5,8,4.903673389317129
+Bayesian Gibbs,0.5,8,4.897044712522105
+Ordinary least squares,0.5,9,4.843426798332579
+Bayesian Gibbs,0.5,9,4.8485387643519635
+Ordinary least squares,0.5,10,4.684198276597372
+Bayesian Gibbs,0.5,10,4.681714316940974
+Ordinary least squares,0.5,11,5.125896242025151
+Bayesian Gibbs,0.5,11,5.136299657310548
+Ordinary least squares,0.5,12,5.049210909199805
+Bayesian Gibbs,0.5,12,5.043738987444589
+Ordinary least squares,0.5,13,4.518891900616236
+Bayesian Gibbs,0.5,13,4.527570980063455
+Ordinary least squares,0.5,14,4.98668006978557
+Bayesian Gibbs,0.5,14,4.983858993820453
+Ordinary least squares,0.5,15,4.779256788085095
+Bayesian Gibbs,0.5,15,4.7681078707441396
+Ordinary least squares,0.5,16,4.576645023978037
+Bayesian Gibbs,0.5,16,4.549531093034315
+Ordinary least squares,0.5,17,5.369821879902961
+Bayesian Gibbs,0.5,17,5.368564724815702
+Ordinary least squares,0.5,18,4.768758268955152
+Bayesian Gibbs,0.5,18,4.769103658113989
+Ordinary least squares,0.5,19,4.933737095075099
+Bayesian Gibbs,0.5,19,4.950425362330196
+Ordinary least squares,0.6,0,4.956729257245419
+Bayesian Gibbs,0.6,0,4.953572132541986
+Ordinary least squares,0.6,1,4.949449697977138
+Bayesian Gibbs,0.6,1,4.949355569028752
+Ordinary least squares,0.6,2,5.9305284551866375
+Bayesian Gibbs,0.6,2,5.9408534787685365
+Ordinary least squares,0.6,3,6.142034385122997
+Bayesian Gibbs,0.6,3,6.151383235662625
+Ordinary least squares,0.6,4,4.748643907043239
+Bayesian Gibbs,0.6,4,4.745953515409184
+Ordinary least squares,0.6,5,4.461799470704414
+Bayesian Gibbs,0.6,5,4.439377566563127
+Ordinary least squares,0.6,6,5.010698380724221
+Bayesian Gibbs,0.6,6,4.9905880916035255
+Ordinary least squares,0.6,7,4.609302045972082
+Bayesian Gibbs,0.6,7,4.602957352944548
+Ordinary least squares,0.6,8,5.0474044047628
+Bayesian Gibbs,0.6,8,5.059804828068511
+Ordinary least squares,0.6,9,5.005364059015404
+Bayesian Gibbs,0.6,9,5.004939731229675
+Ordinary least squares,0.6,10,4.6741767773167915
+Bayesian Gibbs,0.6,10,4.644883696195302
+Ordinary least squares,0.6,11,5.033663061781667
+Bayesian Gibbs,0.6,11,5.039442403798064
+Ordinary least squares,0.6,12,4.83275480839099
+Bayesian Gibbs,0.6,12,4.833673798162884
+Ordinary least squares,0.6,13,5.307202214475702
+Bayesian Gibbs,0.6,13,5.298497752167434
+Ordinary least squares,0.6,14,4.603041796244474
+Bayesian Gibbs,0.6,14,4.584671967896079
+Ordinary least squares,0.6,15,4.899083818308608
+Bayesian Gibbs,0.6,15,4.887722506943009
+Ordinary least squares,0.6,16,6.338083918485625
+Bayesian Gibbs,0.6,16,6.345867357650325
+Ordinary least squares,0.6,17,4.985451633875892
+Bayesian Gibbs,0.6,17,4.9923618317315475
+Ordinary least squares,0.6,18,5.1441094009232256
+Bayesian Gibbs,0.6,18,5.150335697721926
+Ordinary least squares,0.6,19,4.7302660952821665
+Bayesian Gibbs,0.6,19,4.726623823654089
+Ordinary least squares,0.7,0,4.602087399800716
+Bayesian Gibbs,0.7,0,4.570569279669564
+Ordinary least squares,0.7,1,5.029228146328778
+Bayesian Gibbs,0.7,1,5.036602376707468
+Ordinary least squares,0.7,2,4.865466228764394
+Bayesian Gibbs,0.7,2,4.85208874511404
+Ordinary least squares,0.7,3,4.866270873613456
+Bayesian Gibbs,0.7,3,4.8453565083701875
+Ordinary least squares,0.7,4,4.351651432263455
+Bayesian Gibbs,0.7,4,4.346965693496209
+Ordinary least squares,0.7,5,4.65428860918763
+Bayesian Gibbs,0.7,5,4.653046969980587
+Ordinary least squares,0.7,6,4.984089278355558
+Bayesian Gibbs,0.7,6,4.974158649239185
+Ordinary least squares,0.7,7,5.2795710795888295
+Bayesian Gibbs,0.7,7,5.280494539946321
+Ordinary least squares,0.7,8,4.191473426733885
+Bayesian Gibbs,0.7,8,4.178024122762593
+Ordinary least squares,0.7,9,4.903864098454403
+Bayesian Gibbs,0.7,9,4.891079890935522
+Ordinary least squares,0.7,10,4.715212031347122
+Bayesian Gibbs,0.7,10,4.700963676567731
+Ordinary least squares,0.7,11,4.435642384288447
+Bayesian Gibbs,0.7,11,4.425039323678154
+Ordinary least squares,0.7,12,4.284983766988017
+Bayesian Gibbs,0.7,12,4.286278650085456
+Ordinary least squares,0.7,13,5.140874471468667
+Bayesian Gibbs,0.7,13,5.150458831704269
+Ordinary least squares,0.7,14,5.801989523014055
+Bayesian Gibbs,0.7,14,5.798689320031736
+Ordinary least squares,0.7,15,5.121704568828396
+Bayesian Gibbs,0.7,15,5.125860142768791
+Ordinary least squares,0.7,16,5.314328552546606
+Bayesian Gibbs,0.7,16,5.314887118237129
+Ordinary least squares,0.7,17,5.035533456164526
+Bayesian Gibbs,0.7,17,5.027688778698952
+Ordinary least squares,0.7,18,4.284419116721737
+Bayesian Gibbs,0.7,18,4.267341963688313
+Ordinary least squares,0.7,19,4.659088260735507
+Bayesian Gibbs,0.7,19,4.631907048221216
+Ordinary least squares,0.8,0,4.250906772764391
+Bayesian Gibbs,0.8,0,4.223148807368753
+Ordinary least squares,0.8,1,5.322587026563706
+Bayesian Gibbs,0.8,1,5.32687076715238
+Ordinary least squares,0.8,2,5.624056596676062
+Bayesian Gibbs,0.8,2,5.627380649460077
+Ordinary least squares,0.8,3,4.710725607539632
+Bayesian Gibbs,0.8,3,4.7042510862256215
+Ordinary least squares,0.8,4,4.989853514055163
+Bayesian Gibbs,0.8,4,5.001247534576841
+Ordinary least squares,0.8,5,4.969740649276699
+Bayesian Gibbs,0.8,5,4.9595062715683635
+Ordinary least squares,0.8,6,5.19399794756676
+Bayesian Gibbs,0.8,6,5.199778229642759
+Ordinary least squares,0.8,7,4.776085705094337
+Bayesian Gibbs,0.8,7,4.772523189676395
+Ordinary least squares,0.8,8,4.340367990738494
+Bayesian Gibbs,0.8,8,4.306806517098575
+Ordinary least squares,0.8,9,5.116838439264392
+Bayesian Gibbs,0.8,9,5.116420060852672
+Ordinary least squares,0.8,10,4.943820719996348
+Bayesian Gibbs,0.8,10,4.907432661470839
+Ordinary least squares,0.8,11,4.715361311063028
+Bayesian Gibbs,0.8,11,4.716098082282712
+Ordinary least squares,0.8,12,5.665303916429143
+Bayesian Gibbs,0.8,12,5.678428069100577
+Ordinary least squares,0.8,13,4.4518653092836376
+Bayesian Gibbs,0.8,13,4.431074836829126
+Ordinary least squares,0.8,14,5.049997054161635
+Bayesian Gibbs,0.8,14,5.05091555544493
+Ordinary least squares,0.8,15,4.76563613214034
+Bayesian Gibbs,0.8,15,4.769742558956349
+Ordinary least squares,0.8,16,4.783612266001607
+Bayesian Gibbs,0.8,16,4.79586598377197
+Ordinary least squares,0.8,17,5.85986627113691
+Bayesian Gibbs,0.8,17,5.846062391213181
+Ordinary least squares,0.8,18,4.206116562478473
+Bayesian Gibbs,0.8,18,4.200677926350262
+Ordinary least squares,0.8,19,5.799346323912645
+Bayesian Gibbs,0.8,19,5.811814862938376
