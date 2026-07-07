@@ -4,11 +4,15 @@ import numpy as np
 
 from bayeslinreg import (
     BayesianLinearRegressionGibbs,
+    crps_normal,
     crps_from_samples,
     interval_score,
     load_boston_csv,
     make_feature_target,
+    negative_log_predictive_density_normal,
     negative_log_predictive_density_mixture,
+    normal_prediction_interval,
+    normal_predictive_metrics,
 )
 
 
@@ -70,6 +74,56 @@ def test_crps_from_samples_matches_point_mass_absolute_error():
     samples = np.array([[2.0, 2.0], [2.0, 2.0], [2.0, 2.0]])
 
     assert crps_from_samples(y_true, samples) == 1.0
+
+
+def test_normal_prediction_interval_matches_standard_normal_quantile():
+    lower, upper = normal_prediction_interval(
+        np.array([0.0]),
+        np.array([1.0]),
+        level=0.95,
+    )
+
+    assert np.isclose(lower[0], -1.959963984540054)
+    assert np.isclose(upper[0], 1.959963984540054)
+
+
+def test_negative_log_predictive_density_normal_matches_standard_normal():
+    expected = 0.5 * math.log(2.0 * math.pi)
+    actual = negative_log_predictive_density_normal(
+        np.array([0.0]),
+        np.array([0.0]),
+        np.array([1.0]),
+    )
+
+    assert np.isclose(actual, expected)
+
+
+def test_crps_normal_matches_standard_normal_at_mean():
+    actual = crps_normal(
+        np.array([0.0]),
+        np.array([0.0]),
+        np.array([1.0]),
+    )
+    expected = math.sqrt(2.0 / math.pi) - (1.0 / math.sqrt(math.pi))
+
+    assert np.isclose(actual, expected)
+
+
+def test_normal_predictive_metrics_reports_95_percent_scores():
+    metrics = normal_predictive_metrics(
+        np.array([0.0]),
+        np.array([0.0]),
+        np.array([1.0]),
+    )
+
+    assert metrics["coverage_95"] == 1.0
+    assert np.isclose(metrics["mean_interval_width"], 3.919927969080108)
+    assert np.isclose(metrics["interval_score_95"], 3.919927969080108)
+    assert np.isclose(metrics["nlpd"], 0.5 * math.log(2.0 * math.pi))
+    assert np.isclose(
+        metrics["crps"],
+        math.sqrt(2.0 / math.pi) - (1.0 / math.sqrt(math.pi)),
+    )
 
 
 def test_negative_log_predictive_density_mixture_matches_standard_normal():

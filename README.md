@@ -48,13 +48,13 @@ The latest generated results use a fixed 80/20 train/test split, 5-fold
 cross-validation on the training split to choose the Bayesian prior variance,
 and standardized predictors. The selected Gibbs prior variance is `tau^2 = 10`.
 
-| Model | RMSE | MAE | R2 | 95% interval coverage |
-| --- | ---: | ---: | ---: | ---: |
-| Ordinary least squares | 4.940 | 3.206 | 0.667 | - |
-| Bayesian Gibbs | 4.948 | 3.206 | 0.666 | 94.1% |
-| BayesianRidge | 4.953 | 3.195 | 0.665 | - |
-| RidgeCV | 4.956 | 3.193 | 0.665 | - |
-| ARDRegression | 4.982 | 3.210 | 0.662 | - |
+| Model | RMSE | MAE | R2 | 95% coverage | NLPD | CRPS | 95% interval score |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Ordinary least squares | 4.940 | 3.206 | 0.667 | 94.1% | 3.018 | 2.482 | 32.724 |
+| Bayesian Gibbs | 4.948 | 3.206 | 0.666 | 94.1% | 3.006 | 2.478 | 32.532 |
+| BayesianRidge | 4.953 | 3.195 | 0.665 | 94.1% | 3.012 | 2.479 | 32.599 |
+| RidgeCV | 4.956 | 3.193 | 0.665 | 94.1% | 3.021 | 2.478 | 32.998 |
+| ARDRegression | 4.982 | 3.210 | 0.662 | 94.1% | 3.018 | 2.497 | 32.638 |
 
 On the full held-out split, ordinary least squares and Bayesian Gibbs are
 effectively tied on point prediction. The Bayesian model adds calibrated
@@ -68,11 +68,16 @@ claim supported here is that Bayesian regression gives comparable point accuracy
 while adding posterior uncertainty, interval estimates, and a framework for
 prior-sensitivity and robustness analysis.
 
-Because Bayesian Gibbs outputs a full posterior predictive distribution, the
-comparison table also reports probabilistic scoring metrics for that row:
+The comparison table now reports probabilistic scores for all benchmark rows:
 negative log predictive density (`nlpd`), continuous ranked probability score
-(`crps`), and the 95% interval score (`interval_score_95`). Baseline rows keep
-these fields blank until comparable predictive distributions are added.
+(`crps`), and the 95% interval score (`interval_score_95`). Ordinary least
+squares and RidgeCV use residual-normal predictive baselines estimated from
+training residuals; these are not Bayesian posterior intervals. BayesianRidge
+and ARDRegression use scikit-learn's predictive standard deviations. On this
+single split, Bayesian Gibbs has the lowest NLPD and interval score, while CRPS
+is essentially tied with RidgeCV and BayesianRidge. These results support
+comparable point prediction plus useful uncertainty quantification, not a broad
+claim that the Gibbs model dominates every baseline.
 
 The benchmark also saves lightweight single-chain MCMC diagnostics for the
 custom Gibbs sampler, including approximate effective sample size and selected

@@ -38,6 +38,7 @@ from bayeslinreg import (  # noqa: E402
     load_boston_csv,
     make_feature_target,
     negative_log_predictive_density_mixture,
+    normal_predictive_metrics,
     regression_metrics,
     rmse,
     summarize_mcmc_samples,
@@ -60,6 +61,16 @@ PALETTE = {
 def ensure_dirs() -> None:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def residual_normal_std(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    n_features: int,
+) -> float:
+    residuals = y_true - y_pred
+    dof = max(1, len(residuals) - n_features - 1)
+    return float(np.sqrt(np.sum(residuals**2) / dof))
 
 
 def fit_gibbs_model(
@@ -153,8 +164,32 @@ def benchmark_models(
 
     for name, model in classical_models.items():
         model.fit(x_train, y_train)
-        y_pred = model.predict(x_test)
-        rows.append({"model": name, **regression_metrics(y_test, y_pred)})
+        if name in {"BayesianRidge", "ARDRegression"}:
+            x_test_scaled = model.named_steps["scale"].transform(x_test)
+            y_pred, predictive_std = model.named_steps["model"].predict(
+                x_test_scaled,
+                return_std=True,
+            )
+        else:
+            y_pred = model.predict(x_test)
+            y_train_pred = model.predict(x_train)
+            predictive_std = np.full(
+                shape=y_test.shape,
+                fill_value=residual_normal_std(
+                    y_train,
+                    y_train_pred,
+                    n_features=x_train.shape[1],
+                ),
+                dtype=float,
+            )
+
+        rows.append(
+            {
+                "model": name,
+                **regression_metrics(y_test, y_pred),
+                **normal_predictive_metrics(y_test, y_pred, predictive_std),
+            }
+        )
 
     gibbs_model, gibbs_pred, predictive, scaler = fit_gibbs_model(
         x_train,
