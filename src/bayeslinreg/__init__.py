@@ -19,11 +19,19 @@ from .metrics import (
     rmse,
 )
 from .models import BayesianLinearRegressionGibbs, PosteriorSummary
+from .repeated_split import (
+    LOWER_IS_BETTER_METRICS,
+    REPEATED_SPLIT_METRICS,
+    pairwise_against_reference,
+    summarize_repeated_splits,
+)
 
 __all__ = [
     "BayesianLinearRegressionGibbs",
     "FEATURE_DESCRIPTIONS",
     "PosteriorSummary",
+    "REPEATED_SPLIT_METRICS",
+    "LOWER_IS_BETTER_METRICS",
     "TARGET",
     "autocorrelation_1d",
     "crps_normal",
@@ -37,7 +45,9 @@ __all__ = [
     "negative_log_predictive_density_mixture",
     "normal_prediction_interval",
     "normal_predictive_metrics",
+    "pairwise_against_reference",
     "regression_metrics",
     "rmse",
+    "summarize_repeated_splits",
     "summarize_mcmc_samples",
 ]

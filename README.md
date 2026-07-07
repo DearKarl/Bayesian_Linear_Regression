@@ -105,18 +105,25 @@ but it is a useful reminder that benchmark features need auditing.
 
 ![MCMC trace diagnostics](reports/figures/mcmc_trace_diagnostics.png)
 
+![Repeated split metric distributions](reports/figures/repeated_split_metric_distributions.png)
+
+![Repeated split paired differences](reports/figures/repeated_split_pairwise_differences.png)
+
 ## Repository Layout
 
 ```text
 .
 |-- BostonHousing_data.csv
 |-- experiments/
-|   `-- run_boston_benchmark.py
+|   |-- run_boston_benchmark.py
+|   `-- run_repeated_split_comparison.py
 |-- src/
 |   `-- bayeslinreg/
 |       |-- data.py
+|       |-- diagnostics.py
 |       |-- metrics.py
-|       `-- models.py
+|       |-- models.py
+|       `-- repeated_split.py
 |-- reports/
 |   |-- figures/
 |   `-- tables/
@@ -127,7 +134,9 @@ but it is a useful reminder that benchmark features need auditing.
 |   `-- roadmap.md
 |-- AGENTS.md
 `-- tests/
-    `-- test_bayeslinreg.py
+    |-- test_bayeslinreg.py
+    |-- test_diagnostics.py
+    `-- test_repeated_split.py
 ```
 
 ## Reproduce
@@ -137,15 +146,13 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python experiments/run_boston_benchmark.py
+python experiments/run_repeated_split_comparison.py
 pytest -q
 ```
 
-The experiment runner regenerates every table under `reports/tables/` and every
-figure under `reports/figures/`.
-
-This documentation-first reframing does not require regenerating benchmark
-outputs. The saved results remain under `reports/tables/` and
-`reports/figures/`.
+The main benchmark regenerates the fixed-split Part I tables and figures. The
+repeated-split script regenerates the split-stability tables and figures. Use
+`--n-repeats` on the repeated-split script for a faster local smoke run.
 
 ## Methodology
 
@@ -179,11 +186,16 @@ uncertainty and residual noise.
 | `reports/tables/tau_cv_summary.csv` | 5-fold CV prior-variance sweep |
 | `reports/tables/posterior_coefficients.csv` | Posterior coefficient means and 95% intervals |
 | `reports/tables/mcmc_diagnostics.csv` | Lightweight single-chain ESS and autocorrelation diagnostics |
+| `reports/tables/repeated_split_raw.csv` | Per-split metrics for repeated random train/test comparisons |
+| `reports/tables/repeated_split_summary.csv` | Repeated-split metric means, standard deviations, and 95% confidence intervals |
+| `reports/tables/repeated_split_pairwise.csv` | Paired baseline-minus-Gibbs differences and Gibbs win rates |
 | `reports/tables/training_size_summary.csv` | Repeated small-data robustness experiment |
 | `reports/tables/bias_variance.csv` | Bootstrap bias-variance decomposition |
 | `reports/tables/legacy_feature_sensitivity.csv` | Full legacy features vs dropping `b` |
 | `reports/tables/test_predictions.csv` | Held-out Bayesian predictions and intervals |
 | `reports/figures/mcmc_trace_diagnostics.png` | Trace plots for intercept, sigma2, and top coefficients |
+| `reports/figures/repeated_split_metric_distributions.png` | Distributions of RMSE, NLPD, CRPS, and interval score across splits |
+| `reports/figures/repeated_split_pairwise_differences.png` | Paired metric differences relative to Bayesian Gibbs |
 
 ## Dataset Note
 
@@ -203,8 +215,6 @@ term direction is documented in:
 
 Good next steps for the lab:
 
-- add posterior convergence diagnostics such as effective sample size and
-  trace plots;
 - compare Gibbs sampling with PyMC/NUTS or NumPyro/HMC;
 - add hierarchical priors, horseshoe shrinkage, and robust likelihoods;
 - evaluate beyond Boston Housing on modern tabular regression datasets;
