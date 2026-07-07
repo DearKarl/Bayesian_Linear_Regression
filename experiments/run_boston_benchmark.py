@@ -56,6 +56,21 @@ PALETTE = {
     "ARDRegression": "#E45756",
     "Bayesian Gibbs": "#F58518",
 }
+MODEL_ORDER = [
+    "Ordinary least squares",
+    "RidgeCV",
+    "BayesianRidge",
+    "ARDRegression",
+    "Bayesian Gibbs",
+]
+METRIC_LABELS = {
+    "rmse": "RMSE",
+    "r2": "R2",
+    "nlpd": "NLPD",
+    "crps": "CRPS",
+    "interval_score_95": "95% interval score",
+    "coverage_95": "95% coverage",
+}
 
 
 def ensure_dirs() -> None:
@@ -409,44 +424,142 @@ def legacy_feature_sensitivity(x: pd.DataFrame, y: pd.Series, *, tau2: float) ->
     return sensitivity
 
 
-def plot_model_comparison(summary: pd.DataFrame) -> None:
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
-    order = summary.sort_values("rmse")["model"].tolist()
-    sns.barplot(
-        data=summary,
-        x="rmse",
-        y="model",
-        hue="model",
-        order=order,
-        palette=PALETTE,
-        legend=False,
-        ax=axes[0],
-    )
-    axes[0].set_title("Held-out RMSE")
-    axes[0].set_xlabel("RMSE, lower is better")
-    axes[0].set_ylabel("")
-    for patch in axes[0].patches:
-        width = patch.get_width()
-        axes[0].text(width + 0.05, patch.get_y() + patch.get_height() / 2, f"{width:.2f}")
+def _ordered_summary(summary: pd.DataFrame) -> pd.DataFrame:
+    ordered = summary.copy()
+    ordered["model"] = pd.Categorical(ordered["model"], categories=MODEL_ORDER, ordered=True)
+    return ordered.sort_values("model").reset_index(drop=True)
 
-    sns.barplot(
-        data=summary,
-        x="r2",
-        y="model",
-        hue="model",
-        order=order,
-        palette=PALETTE,
-        legend=False,
-        ax=axes[1],
+
+def _zoomed_axis_limits(
+    values: pd.Series | np.ndarray,
+    *,
+    pad_fraction: float = 0.22,
+) -> tuple[float, float]:
+    values = np.asarray(values, dtype=float)
+    low = float(np.min(values))
+    high = float(np.max(values))
+    span = high - low
+    if span == 0:
+        span = max(abs(high), 1.0) * 0.02
+    padding = span * pad_fraction
+    return low - padding, high + padding
+
+
+def plot_model_comparison(summary: pd.DataFrame) -> None:
+    plot_df = _ordered_summary(summary)
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5.8), sharey=True)
+    metrics = ("rmse", "r2")
+    subtitles = {
+        "rmse": "Held-out RMSE, lower is better",
+        "r2": "Held-out R2, higher is better",
+    }
+    y_pos = np.arange(len(plot_df))
+
+    for ax, metric in zip(axes, metrics):
+        values = plot_df[metric].to_numpy()
+        baseline = values.min() if metric == "rmse" else values.max()
+        ax.hlines(
+            y_pos,
+            xmin=np.minimum(values, baseline),
+            xmax=np.maximum(values, baseline),
+            color="#C8CDD5",
+            linewidth=2.0,
+            zorder=1,
+        )
+        colors = [PALETTE[model] for model in plot_df["model"].astype(str)]
+        ax.scatter(
+            values,
+            y_pos,
+            color=colors,
+            s=95,
+            edgecolor="white",
+            linewidth=0.8,
+            zorder=2,
+        )
+        x_min, x_max = _zoomed_axis_limits(values)
+        ax.set_xlim(x_min, x_max)
+        offset = (x_max - x_min) * 0.018
+        for y_index, value in enumerate(values):
+            ha = "left"
+            x_text = value + offset
+            if x_text > x_max - offset:
+                ha = "right"
+                x_text = value - offset
+            ax.text(x_text, y_index, f"{value:.3f}", va="center", ha=ha, fontsize=10)
+
+        ax.set_title(subtitles[metric])
+        ax.set_xlabel(METRIC_LABELS[metric])
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(plot_df["model"])
+        ax.grid(True, axis="x", alpha=0.25)
+        ax.grid(False, axis="y")
+
+    axes[0].set_ylabel("")
+    fig.suptitle(
+        "Fixed-split point metrics: near-ties need a zoomed scale",
+        y=1.02,
+        fontsize=15,
     )
-    axes[1].set_title("Held-out R2")
-    axes[1].set_xlabel("R2, higher is better")
-    axes[1].set_ylabel("")
-    for patch in axes[1].patches:
-        width = patch.get_width()
-        axes[1].text(width + 0.01, patch.get_y() + patch.get_height() / 2, f"{width:.2f}")
     fig.tight_layout()
+    fig.savefig(FIGURES_DIR / "fixed_split_point_metrics.png", dpi=220, bbox_inches="tight")
     fig.savefig(FIGURES_DIR / "model_comparison.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_fixed_split_probabilistic_metrics(summary: pd.DataFrame) -> None:
+    plot_df = _ordered_summary(summary)
+    fig, axes = plt.subplots(2, 2, figsize=(14, 9), sharey=True)
+    metrics = ("nlpd", "crps", "interval_score_95", "coverage_95")
+    subtitles = {
+        "nlpd": "Negative log predictive density, lower is better",
+        "crps": "CRPS, lower is better",
+        "interval_score_95": "95% interval score, lower is better",
+        "coverage_95": "95% coverage, target = 0.95",
+    }
+    y_pos = np.arange(len(plot_df))
+
+    for ax, metric in zip(axes.ravel(), metrics):
+        values = plot_df[metric].to_numpy()
+        colors = [PALETTE[model] for model in plot_df["model"].astype(str)]
+        ax.scatter(
+            values,
+            y_pos,
+            color=colors,
+            s=90,
+            edgecolor="white",
+            linewidth=0.8,
+            zorder=2,
+        )
+        if metric == "coverage_95":
+            ax.axvline(0.95, color="#222222", linestyle="--", linewidth=1.2)
+        x_min, x_max = _zoomed_axis_limits(values)
+        if metric == "coverage_95":
+            x_min = min(x_min, 0.95 - 0.01)
+            x_max = max(x_max, 0.95 + 0.01)
+        ax.set_xlim(x_min, x_max)
+        offset = (x_max - x_min) * 0.018
+        for y_index, value in enumerate(values):
+            ha = "left"
+            x_text = value + offset
+            if x_text > x_max - offset:
+                ha = "right"
+                x_text = value - offset
+            ax.text(x_text, y_index, f"{value:.3f}", va="center", ha=ha, fontsize=10)
+
+        ax.set_title(subtitles[metric])
+        ax.set_xlabel(METRIC_LABELS[metric])
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(plot_df["model"])
+        ax.grid(True, axis="x", alpha=0.25)
+        ax.grid(False, axis="y")
+
+    fig.suptitle("Fixed-split probabilistic metrics", y=1.02, fontsize=15)
+    fig.tight_layout()
+    fig.savefig(
+        FIGURES_DIR / "fixed_split_probabilistic_metrics.png",
+        dpi=220,
+        bbox_inches="tight",
+    )
     plt.close(fig)
 
 
@@ -704,6 +817,7 @@ def main() -> None:
     sensitivity = legacy_feature_sensitivity(x_df, y_series, tau2=best_tau2)
 
     plot_model_comparison(model_summary)
+    plot_fixed_split_probabilistic_metrics(model_summary)
     plot_tau_sensitivity(tau_cv)
     plot_predictions(predictions)
     plot_coefficients(coefficients)
