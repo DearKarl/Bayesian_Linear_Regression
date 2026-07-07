@@ -32,9 +32,12 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from bayeslinreg import (  # noqa: E402
     BayesianLinearRegressionGibbs,
     FEATURE_DESCRIPTIONS,
+    crps_from_samples,
     interval_metrics,
+    interval_score,
     load_boston_csv,
     make_feature_target,
+    negative_log_predictive_density_mixture,
     regression_metrics,
     rmse,
 )
@@ -161,11 +164,28 @@ def benchmark_models(
         burn_in=800,
         random_state=SEED,
     )
+    x_test_scaled = scaler.transform(x_test)
+    location_samples = gibbs_model.posterior_predictive(
+        x_test_scaled,
+        include_noise=False,
+    ).samples
     rows.append(
         {
             "model": "Bayesian Gibbs",
             **regression_metrics(y_test, gibbs_pred),
             **interval_metrics(y_test, predictive.lower, predictive.upper),
+            "nlpd": negative_log_predictive_density_mixture(
+                y_test,
+                location_samples,
+                gibbs_model.sigma2_samples_,
+            ),
+            "crps": crps_from_samples(y_test, predictive.samples),
+            "interval_score_95": interval_score(
+                y_test,
+                predictive.lower,
+                predictive.upper,
+                alpha=0.05,
+            ),
         }
     )
 
