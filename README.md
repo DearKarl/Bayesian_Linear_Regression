@@ -68,6 +68,12 @@ claim supported here is that Bayesian regression gives comparable point accuracy
 while adding posterior uncertainty, interval estimates, and a framework for
 prior-sensitivity and robustness analysis.
 
+Because Bayesian Gibbs outputs a full posterior predictive distribution, the
+comparison table also reports probabilistic scoring metrics for that row:
+negative log predictive density (`nlpd`), continuous ranked probability score
+(`crps`), and the 95% interval score (`interval_score_95`). Baseline rows keep
+these fields blank until comparable predictive distributions are added.
+
 The `b` feature in Boston Housing is ethically problematic. A sensitivity run
 that drops it improves the Bayesian Gibbs test RMSE from 4.951 to 4.791 and
 raises 95% interval coverage from 94.1% to 96.1%. This is not a causal claim,
@@ -157,7 +163,7 @@ uncertainty and residual noise.
 
 | File | Description |
 | --- | --- |
-| `reports/tables/model_comparison.csv` | Held-out RMSE, MAE, R2, and interval coverage |
+| `reports/tables/model_comparison.csv` | Held-out RMSE, MAE, R2, interval coverage, NLPD, CRPS, and interval score |
 | `reports/tables/tau_cv_summary.csv` | 5-fold CV prior-variance sweep |
 | `reports/tables/posterior_coefficients.csv` | Posterior coefficient means and 95% intervals |
 | `reports/tables/training_size_summary.csv` | Repeated small-data robustness experiment |

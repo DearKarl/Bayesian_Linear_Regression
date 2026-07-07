@@ -11,7 +11,10 @@
       "mae": 3.2064039639003856,
       "r2": 0.6672089705941879,
       "coverage_95": NaN,
-      "mean_interval_width": NaN
+      "mean_interval_width": NaN,
+      "nlpd": NaN,
+      "crps": NaN,
+      "interval_score_95": NaN
     },
     {
       "model": "RidgeCV",
@@ -19,7 +22,10 @@
       "mae": 3.1929767580461235,
       "r2": 0.6651224819609396,
       "coverage_95": NaN,
-      "mean_interval_width": NaN
+      "mean_interval_width": NaN,
+      "nlpd": NaN,
+      "crps": NaN,
+      "interval_score_95": NaN
     },
     {
       "model": "BayesianRidge",
@@ -27,7 +33,10 @@
       "mae": 3.1948988283343986,
       "r2": 0.6654759503018602,
       "coverage_95": NaN,
-      "mean_interval_width": NaN
+      "mean_interval_width": NaN,
+      "nlpd": NaN,
+      "crps": NaN,
+      "interval_score_95": NaN
     },
     {
       "model": "ARDRegression",
@@ -35,7 +44,10 @@
       "mae": 3.21022014437725,
       "r2": 0.6614998064258875,
       "coverage_95": NaN,
-      "mean_interval_width": NaN
+      "mean_interval_width": NaN,
+      "nlpd": NaN,
+      "crps": NaN,
+      "interval_score_95": NaN
     },
     {
       "model": "Bayesian Gibbs",
@@ -43,7 +55,10 @@
       "mae": 3.2055635684975585,
       "r2": 0.666108252535208,
       "coverage_95": 0.9411764705882353,
-      "mean_interval_width": 18.887495076717883
+      "mean_interval_width": 18.887495076717883,
+      "nlpd": 3.0059403554091815,
+      "crps": 2.4782905676391005,
+      "interval_score_95": 32.53164845682214
     }
   ],
   "legacy_feature_sensitivity": [
