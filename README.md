@@ -1,23 +1,48 @@
-# Bayesian Linear Regression on Boston Housing
+# Bayesian Methods Lab
 
-Pure-Python research benchmark for comparing ordinary linear regression with
-Bayesian linear regression on the Boston Housing dataset.
+Exploring Bayesian modeling, posterior inference, uncertainty quantification,
+and robust prediction.
 
-This repository started as an MSc Bayesian linear regression coursework project.
-It is now structured as a reproducible research codebase: reusable Python
-modules, a single experiment runner, generated benchmark tables, publication
-style figures, and explicit notes about the legacy Boston Housing dataset.
+This repository is an exploratory research lab for Bayesian methods. The current
+implemented study is **Part I: Bayesian Regression Foundations**, a reproducible
+Boston Housing benchmark comparing ordinary least squares with Bayesian linear
+regression and related linear baselines.
+
+The project is intentionally growing in stages. Part I keeps the model class
+simple so that posterior inference, prior sensitivity, uncertainty
+quantification, and robustness can be studied before adding more advanced
+Bayesian models.
 
 ## Research Question
 
-How much do Bayesian linear regression techniques help beyond ordinary least
-squares when the dataset is small, correlated, and uncertainty matters?
+For Part I, the guiding question is:
+
+How much does Bayesian linear regression add beyond ordinary least squares when
+the dataset is small, correlated, and uncertainty matters?
 
 The current experiments compare point prediction, posterior uncertainty,
 prior-variance sensitivity, small-data robustness, and the bias-variance
 trade-off.
 
-## Snapshot
+Future parts will extend the lab toward MCMC diagnostics, probabilistic scoring,
+robust Bayesian regression, sparse priors, hierarchical models, Gaussian
+processes or BART, and engineering-mathematics applications such as inverse
+problems and Bayesian calibration.
+
+## Part I: Bayesian Regression Foundations
+
+The current benchmark preserves the original Boston Housing study and all
+generated numeric results. It includes:
+
+- ordinary least squares, RidgeCV, BayesianRidge, and ARDRegression baselines;
+- a custom conjugate Bayesian linear regression Gibbs sampler;
+- prior-variance tuning over `tau^2`;
+- posterior coefficient intervals and posterior predictive intervals;
+- small-data robustness experiments;
+- bootstrap bias-variance decomposition;
+- a sensitivity check for the legacy `b` feature in Boston Housing.
+
+## Snapshot: Current Saved Results
 
 The latest generated results use a fixed 80/20 train/test split, 5-fold
 cross-validation on the training split to choose the Bayesian prior variance,
@@ -36,6 +61,12 @@ effectively tied on point prediction. The Bayesian model adds calibrated
 posterior predictive intervals and is slightly more stable in repeated
 small-data experiments: across 20%-80% training-size repeats, Bayesian Gibbs
 reduces average RMSE by about 0.018, or 0.35%, relative to OLS.
+
+This should be read carefully: the current single-split RMSE results do **not**
+show that Bayesian regression outperforms OLS on point prediction. The stronger
+claim supported here is that Bayesian regression gives comparable point accuracy
+while adding posterior uncertainty, interval estimates, and a framework for
+prior-sensitivity and robustness analysis.
 
 The `b` feature in Boston Housing is ethically problematic. A sensitivity run
 that drops it improves the Bayesian Gibbs test RMSE from 4.951 to 4.791 and
@@ -73,7 +104,10 @@ but it is a useful reminder that benchmark features need auditing.
 |   `-- tables/
 |-- docs/
 |   |-- dataset_note.md
-|   `-- original_report_summary.md
+|   |-- original_report_summary.md
+|   |-- research_questions.md
+|   `-- roadmap.md
+|-- AGENTS.md
 `-- tests/
     `-- test_bayeslinreg.py
 ```
@@ -90,6 +124,10 @@ pytest -q
 
 The experiment runner regenerates every table under `reports/tables/` and every
 figure under `reports/figures/`.
+
+This documentation-first reframing does not require regenerating benchmark
+outputs. The saved results remain under `reports/tables/` and
+`reports/figures/`.
 
 ## Methodology
 
@@ -137,7 +175,13 @@ ethical reasons. See [`docs/dataset_note.md`](docs/dataset_note.md).
 
 ## Research Direction
 
-Good next steps for a PhD-facing Bayesian regression project:
+Bayesian Methods Lab will grow through PR-sized research increments. The near
+term direction is documented in:
+
+- [`docs/research_questions.md`](docs/research_questions.md)
+- [`docs/roadmap.md`](docs/roadmap.md)
+
+Good next steps for the lab:
 
 - add posterior convergence diagnostics such as effective sample size and
   trace plots;
