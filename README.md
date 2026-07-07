@@ -74,6 +74,11 @@ negative log predictive density (`nlpd`), continuous ranked probability score
 (`crps`), and the 95% interval score (`interval_score_95`). Baseline rows keep
 these fields blank until comparable predictive distributions are added.
 
+The benchmark also saves lightweight single-chain MCMC diagnostics for the
+custom Gibbs sampler, including approximate effective sample size and selected
+autocorrelations. These diagnostics are intended for inspecting mixing, not for
+claiming formal convergence; multi-chain R-hat diagnostics are future work.
+
 The `b` feature in Boston Housing is ethically problematic. A sensitivity run
 that drops it improves the Bayesian Gibbs test RMSE from 4.951 to 4.791 and
 raises 95% interval coverage from 94.1% to 96.1%. This is not a causal claim,
@@ -92,6 +97,8 @@ but it is a useful reminder that benchmark features need auditing.
 ![Small-data robustness](reports/figures/training_size_robustness.png)
 
 ![Bias variance tradeoff](reports/figures/bias_variance_tradeoff.png)
+
+![MCMC trace diagnostics](reports/figures/mcmc_trace_diagnostics.png)
 
 ## Repository Layout
 
@@ -166,10 +173,12 @@ uncertainty and residual noise.
 | `reports/tables/model_comparison.csv` | Held-out RMSE, MAE, R2, interval coverage, NLPD, CRPS, and interval score |
 | `reports/tables/tau_cv_summary.csv` | 5-fold CV prior-variance sweep |
 | `reports/tables/posterior_coefficients.csv` | Posterior coefficient means and 95% intervals |
+| `reports/tables/mcmc_diagnostics.csv` | Lightweight single-chain ESS and autocorrelation diagnostics |
 | `reports/tables/training_size_summary.csv` | Repeated small-data robustness experiment |
 | `reports/tables/bias_variance.csv` | Bootstrap bias-variance decomposition |
 | `reports/tables/legacy_feature_sensitivity.csv` | Full legacy features vs dropping `b` |
 | `reports/tables/test_predictions.csv` | Held-out Bayesian predictions and intervals |
+| `reports/figures/mcmc_trace_diagnostics.png` | Trace plots for intercept, sigma2, and top coefficients |
 
 ## Dataset Note
 

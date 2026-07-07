@@ -40,6 +40,7 @@ from bayeslinreg import (  # noqa: E402
     negative_log_predictive_density_mixture,
     regression_metrics,
     rmse,
+    summarize_mcmc_samples,
 )
 
 SEED = 42
@@ -216,6 +217,17 @@ def coefficient_table(
     summary = summary.sort_values("abs_mean", ascending=False)
     summary.to_csv(TABLES_DIR / "posterior_coefficients.csv", index=False)
     return summary
+
+
+def mcmc_diagnostics_table(
+    model: BayesianLinearRegressionGibbs,
+    feature_names: list[str],
+) -> pd.DataFrame:
+    parameter_names = ["intercept", *feature_names, "sigma2"]
+    samples = np.column_stack([model.beta_samples_, model.sigma2_samples_])
+    diagnostics = pd.DataFrame(summarize_mcmc_samples(parameter_names, samples))
+    diagnostics.to_csv(TABLES_DIR / "mcmc_diagnostics.csv", index=False)
+    return diagnostics
 
 
 def training_size_experiment(
@@ -495,6 +507,40 @@ def plot_coefficients(coefficients: pd.DataFrame) -> None:
     plt.close(fig)
 
 
+def plot_mcmc_trace_diagnostics(
+    model: BayesianLinearRegressionGibbs,
+    feature_names: list[str],
+) -> None:
+    coefficient_means = model.beta_samples_.mean(axis=0)
+    top_feature_indices = np.argsort(np.abs(coefficient_means[1:]))[::-1][:5] + 1
+
+    traces: list[tuple[str, np.ndarray]] = [("intercept", model.beta_samples_[:, 0])]
+    traces.append(("sigma2", model.sigma2_samples_))
+    for index in top_feature_indices:
+        traces.append((feature_names[index - 1], model.beta_samples_[:, index]))
+
+    fig, axes = plt.subplots(
+        len(traces),
+        1,
+        figsize=(12, 2.0 * len(traces)),
+        sharex=True,
+    )
+    if len(traces) == 1:
+        axes = [axes]
+
+    draw_index = np.arange(model.beta_samples_.shape[0])
+    for ax, (name, values) in zip(axes, traces):
+        ax.plot(draw_index, values, color="#4C78A8", linewidth=0.7, alpha=0.9)
+        ax.set_ylabel(name)
+        ax.grid(True, alpha=0.25)
+
+    axes[0].set_title("Single-chain Gibbs trace diagnostics")
+    axes[-1].set_xlabel("Post-burn-in draw")
+    fig.tight_layout()
+    fig.savefig(FIGURES_DIR / "mcmc_trace_diagnostics.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
 def plot_training_size(summary: pd.DataFrame) -> None:
     fig, ax = plt.subplots(figsize=(8, 5))
     for model, group in summary.groupby("model"):
@@ -617,6 +663,7 @@ def main() -> None:
         best_tau2=best_tau2,
     )
     coefficients = coefficient_table(gibbs_model, feature_names)
+    mcmc_diagnostics_table(gibbs_model, feature_names)
     training_summary = training_size_experiment(x, y, tau2=best_tau2)
     bias_variance = bias_variance_experiment(x, y, tau_grid=TAU_GRID)
     sensitivity = legacy_feature_sensitivity(x_df, y_series, tau2=best_tau2)
@@ -625,6 +672,7 @@ def main() -> None:
     plot_tau_sensitivity(tau_cv)
     plot_predictions(predictions)
     plot_coefficients(coefficients)
+    plot_mcmc_trace_diagnostics(gibbs_model, feature_names)
     plot_training_size(training_summary)
     plot_bias_variance(bias_variance)
     plot_residuals(predictions)
