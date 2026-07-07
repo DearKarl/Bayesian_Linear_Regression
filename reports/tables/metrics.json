@@ -10,44 +10,44 @@
       "rmse": 4.940124005341008,
       "mae": 3.2064039639003856,
       "r2": 0.6672089705941879,
-      "coverage_95": NaN,
-      "mean_interval_width": NaN,
-      "nlpd": NaN,
-      "crps": NaN,
-      "interval_score_95": NaN
+      "coverage_95": 0.9411764705882353,
+      "mean_interval_width": 18.579327824798547,
+      "nlpd": 3.018092449588068,
+      "crps": 2.481994381579731,
+      "interval_score_95": 32.72446102069773
     },
     {
       "model": "RidgeCV",
       "rmse": 4.955586271385415,
       "mae": 3.1929767580461235,
       "r2": 0.6651224819609396,
-      "coverage_95": NaN,
-      "mean_interval_width": NaN,
-      "nlpd": NaN,
-      "crps": NaN,
-      "interval_score_95": NaN
+      "coverage_95": 0.9411764705882353,
+      "mean_interval_width": 18.60183373223218,
+      "nlpd": 3.0213868048715518,
+      "crps": 2.4775961143487946,
+      "interval_score_95": 32.998157476322966
     },
     {
       "model": "BayesianRidge",
       "rmse": 4.952970232343062,
       "mae": 3.1948988283343986,
       "r2": 0.6654759503018602,
-      "coverage_95": NaN,
-      "mean_interval_width": NaN,
-      "nlpd": NaN,
-      "crps": NaN,
-      "interval_score_95": NaN
+      "coverage_95": 0.9411764705882353,
+      "mean_interval_width": 18.82644671495654,
+      "nlpd": 3.012229551184486,
+      "crps": 2.4788083391744182,
+      "interval_score_95": 32.598754524790216
     },
     {
       "model": "ARDRegression",
       "rmse": 4.9823187167514,
       "mae": 3.21022014437725,
       "r2": 0.6614998064258875,
-      "coverage_95": NaN,
-      "mean_interval_width": NaN,
-      "nlpd": NaN,
-      "crps": NaN,
-      "interval_score_95": NaN
+      "coverage_95": 0.9411764705882353,
+      "mean_interval_width": 18.748029544495523,
+      "nlpd": 3.0179623860146365,
+      "crps": 2.4972534326443143,
+      "interval_score_95": 32.63799738659682
     },
     {
       "model": "Bayesian Gibbs",

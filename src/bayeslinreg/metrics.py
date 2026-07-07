@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+from scipy.special import ndtr, ndtri
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
@@ -41,6 +42,27 @@ def interval_metrics(
         "coverage_95": float(np.mean(covered)),
         "mean_interval_width": float(np.mean(upper - lower)),
     }
+
+
+def normal_prediction_interval(
+    mean: np.ndarray,
+    std: np.ndarray,
+    level: float = 0.95,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Central prediction interval for independent normal predictive laws."""
+
+    if not 0 < level < 1:
+        raise ValueError("level must be between 0 and 1")
+
+    mean = _as_1d_float(mean, name="mean")
+    std = _as_1d_float(std, name="std")
+    if mean.shape != std.shape:
+        raise ValueError("mean and std must have the same shape")
+    if np.any(std <= 0):
+        raise ValueError("std must be positive")
+
+    z_value = ndtri(0.5 + level / 2.0)
+    return mean - z_value * std, mean + z_value * std
 
 
 def interval_score(
@@ -101,6 +123,77 @@ def crps_from_samples(y_true: np.ndarray, predictive_samples: np.ndarray) -> flo
     )
     crps = first_term - 0.5 * mean_pairwise_abs
     return float(np.mean(crps))
+
+
+def negative_log_predictive_density_normal(
+    y_true: np.ndarray,
+    mean: np.ndarray,
+    std: np.ndarray,
+) -> float:
+    """Mean negative log predictive density for normal predictions."""
+
+    y_true = _as_1d_float(y_true, name="y_true")
+    mean = _as_1d_float(mean, name="mean")
+    std = _as_1d_float(std, name="std")
+    if not (y_true.shape == mean.shape == std.shape):
+        raise ValueError("y_true, mean, and std must have the same shape")
+    if np.any(std <= 0):
+        raise ValueError("std must be positive")
+
+    z = (y_true - mean) / std
+    log_density = -0.5 * np.log(2.0 * np.pi) - np.log(std) - 0.5 * z**2
+    return float(-np.mean(log_density))
+
+
+def crps_normal(
+    y_true: np.ndarray,
+    mean: np.ndarray,
+    std: np.ndarray,
+) -> float:
+    """Closed-form mean CRPS for normal predictive distributions."""
+
+    y_true = _as_1d_float(y_true, name="y_true")
+    mean = _as_1d_float(mean, name="mean")
+    std = _as_1d_float(std, name="std")
+    if not (y_true.shape == mean.shape == std.shape):
+        raise ValueError("y_true, mean, and std must have the same shape")
+    if np.any(std <= 0):
+        raise ValueError("std must be positive")
+
+    z = (y_true - mean) / std
+    normal_pdf = np.exp(-0.5 * z**2) / np.sqrt(2.0 * np.pi)
+    normal_cdf = ndtr(z)
+    score = std * (
+        z * (2.0 * normal_cdf - 1.0)
+        + 2.0 * normal_pdf
+        - 1.0 / np.sqrt(np.pi)
+    )
+    return float(np.mean(score))
+
+
+def normal_predictive_metrics(
+    y_true: np.ndarray,
+    mean: np.ndarray,
+    std: np.ndarray,
+    level: float = 0.95,
+) -> dict[str, float]:
+    """Coverage, sharpness, and proper scores for normal predictions."""
+
+    if not np.isclose(level, 0.95):
+        raise ValueError("normal_predictive_metrics currently reports 95% metrics only")
+
+    lower, upper = normal_prediction_interval(mean, std, level=level)
+    return {
+        **interval_metrics(y_true, lower, upper),
+        "nlpd": negative_log_predictive_density_normal(y_true, mean, std),
+        "crps": crps_normal(y_true, mean, std),
+        "interval_score_95": interval_score(
+            y_true,
+            lower,
+            upper,
+            alpha=1.0 - level,
+        ),
+    }
 
 
 def negative_log_predictive_density_mixture(
