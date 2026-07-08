@@ -80,6 +80,7 @@ METRIC_LABELS = {
     "crps": "CRPS",
     "interval_score_95": "95% interval score",
 }
+COMPARISON_ORDER = [model for model in MODEL_ORDER if model != "Bayesian Gibbs"]
 
 
 def ensure_dirs() -> None:
@@ -271,16 +272,109 @@ def plot_metric_distributions(raw: pd.DataFrame) -> None:
     plt.close(fig)
 
 
+def _zoomed_axis_limits(
+    values: pd.Series | np.ndarray,
+    *,
+    pad_fraction: float = 0.22,
+) -> tuple[float, float]:
+    values = np.asarray(values, dtype=float)
+    low = float(np.min(values))
+    high = float(np.max(values))
+    span = high - low
+    if span == 0:
+        span = max(abs(high), 1.0) * 0.02
+    padding = span * pad_fraction
+    return low - padding, high + padding
+
+
+def plot_repeated_split_mean_ci(summary: pd.DataFrame) -> None:
+    plot_df = summary[summary["metric"].isin(PLOT_METRICS)].copy()
+    fig, axes = plt.subplots(2, 2, figsize=(14, 9), sharey=True)
+    y_pos = np.arange(len(MODEL_ORDER))
+
+    for ax, metric in zip(axes.ravel(), PLOT_METRICS):
+        metric_df = plot_df[plot_df["metric"] == metric].copy()
+        metric_df["model"] = pd.Categorical(
+            metric_df["model"],
+            categories=MODEL_ORDER,
+            ordered=True,
+        )
+        metric_df = metric_df.sort_values("model")
+        means = metric_df["mean"].to_numpy()
+        xerr = np.vstack(
+            [
+                means - metric_df["ci95_lower"].to_numpy(),
+                metric_df["ci95_upper"].to_numpy() - means,
+            ]
+        )
+        colors = [PALETTE[model] for model in metric_df["model"].astype(str)]
+        ax.errorbar(
+            means,
+            y_pos,
+            xerr=xerr,
+            fmt="none",
+            ecolor="#333333",
+            elinewidth=1.2,
+            capsize=3,
+            zorder=1,
+        )
+        ax.scatter(
+            means,
+            y_pos,
+            color=colors,
+            s=75,
+            edgecolor="white",
+            linewidth=0.7,
+            zorder=2,
+        )
+        x_min = float(np.min(metric_df["ci95_lower"]))
+        x_max = float(np.max(metric_df["ci95_upper"]))
+        axis_min, axis_max = _zoomed_axis_limits(np.array([x_min, x_max]), pad_fraction=0.12)
+        ax.set_xlim(axis_min, axis_max)
+        offset = (axis_max - axis_min) * 0.014
+        for y_index, value in enumerate(means):
+            ha = "left"
+            x_text = value + offset
+            if x_text > axis_max - offset:
+                ha = "right"
+                x_text = value - offset
+            ax.text(
+                x_text,
+                y_index,
+                f"{value:.3f}",
+                va="center",
+                ha=ha,
+                fontsize=9,
+                bbox={
+                    "facecolor": "white",
+                    "edgecolor": "none",
+                    "alpha": 0.75,
+                    "pad": 1.5,
+                },
+            )
+
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(MODEL_ORDER)
+        ax.set_title(f"{METRIC_LABELS[metric]} mean with 95% CI")
+        ax.set_xlabel("Lower is better")
+        ax.grid(True, axis="x", alpha=0.25)
+        ax.grid(False, axis="y")
+
+    fig.suptitle("Repeated split summary: model means and uncertainty", y=1.02, fontsize=15)
+    fig.tight_layout()
+    fig.savefig(FIGURES_DIR / "repeated_split_mean_ci.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
 def plot_pairwise_differences(pairwise: pd.DataFrame) -> None:
     plot_df = pairwise[pairwise["metric"].isin(PLOT_METRICS)].copy()
     fig, axes = plt.subplots(2, 2, figsize=(14, 9), sharex=False)
-    comparison_order = [model for model in MODEL_ORDER if model != "Bayesian Gibbs"]
 
     for ax, metric in zip(axes.ravel(), PLOT_METRICS):
         metric_df = plot_df[plot_df["metric"] == metric].copy()
         metric_df["comparison_model"] = pd.Categorical(
             metric_df["comparison_model"],
-            categories=comparison_order,
+            categories=COMPARISON_ORDER,
             ordered=True,
         )
         metric_df = metric_df.sort_values("comparison_model")
@@ -315,6 +409,127 @@ def plot_pairwise_differences(pairwise: pd.DataFrame) -> None:
     fig.tight_layout()
     fig.savefig(
         FIGURES_DIR / "repeated_split_pairwise_differences.png",
+        dpi=220,
+        bbox_inches="tight",
+    )
+    plt.close(fig)
+
+
+def plot_pairwise_forest(pairwise: pd.DataFrame) -> None:
+    plot_df = pairwise[pairwise["metric"].isin(PLOT_METRICS)].copy()
+    fig, axes = plt.subplots(2, 2, figsize=(14, 9), sharex=False)
+
+    for ax, metric in zip(axes.ravel(), PLOT_METRICS):
+        metric_df = plot_df[plot_df["metric"] == metric].copy()
+        metric_df["comparison_model"] = pd.Categorical(
+            metric_df["comparison_model"],
+            categories=COMPARISON_ORDER,
+            ordered=True,
+        )
+        metric_df = metric_df.sort_values("comparison_model")
+        y_pos = np.arange(len(metric_df))
+        means = metric_df["mean_difference"].to_numpy()
+        lower = metric_df["ci95_lower"].to_numpy()
+        upper = metric_df["ci95_upper"].to_numpy()
+        crosses_zero = (lower <= 0.0) & (upper >= 0.0)
+        colors = np.where(
+            crosses_zero,
+            "#8E99A8",
+            np.where(means > 0.0, "#F58518", "#4C78A8"),
+        )
+        max_abs = float(np.max(np.abs(np.concatenate([lower, upper, means, np.array([0.0])]))))
+        axis_limit = max_abs * 1.2 if max_abs > 0 else 1.0
+
+        ax.axvspan(-axis_limit, 0.0, color="#4C78A8", alpha=0.055, zorder=0)
+        ax.axvspan(0.0, axis_limit, color="#F58518", alpha=0.065, zorder=0)
+        for y_index, mean_value, lower_value, upper_value, color in zip(
+            y_pos,
+            means,
+            lower,
+            upper,
+            colors,
+        ):
+            ax.errorbar(
+                mean_value,
+                y_index,
+                xerr=[[mean_value - lower_value], [upper_value - mean_value]],
+                fmt="none",
+                ecolor=color,
+                elinewidth=2.0,
+                capsize=4,
+                zorder=1,
+            )
+            ax.scatter(
+                mean_value,
+                y_index,
+                color=color,
+                s=70,
+                edgecolor="white",
+                linewidth=0.8,
+                zorder=2,
+            )
+        ax.axvline(0.0, color="#222222", linestyle="--", linewidth=1.2, zorder=3)
+        ax.set_xlim(-axis_limit, axis_limit)
+        ax.set_yticks(y_pos)
+        ax.set_yticklabels(metric_df["comparison_model"])
+        ax.set_title(METRIC_LABELS[metric])
+        ax.set_xlabel("Baseline - Bayesian Gibbs")
+        ax.text(0.02, 1.04, "favors baseline", transform=ax.transAxes, ha="left", fontsize=9)
+        ax.text(0.98, 1.04, "favors Gibbs", transform=ax.transAxes, ha="right", fontsize=9)
+        for y_index, is_crossing in enumerate(crosses_zero):
+            if is_crossing:
+                ax.text(
+                    axis_limit * 0.98,
+                    y_index,
+                    "crosses 0",
+                    va="center",
+                    ha="right",
+                    fontsize=8,
+                    color="#6B7280",
+                )
+        ax.grid(True, axis="x", alpha=0.22)
+        ax.grid(False, axis="y")
+
+    fig.suptitle("Repeated split paired differences with 95% CIs", y=1.02, fontsize=15)
+    fig.tight_layout()
+    fig.savefig(
+        FIGURES_DIR / "repeated_split_pairwise_forest.png",
+        dpi=220,
+        bbox_inches="tight",
+    )
+    plt.close(fig)
+
+
+def plot_gibbs_win_rate_heatmap(pairwise: pd.DataFrame) -> None:
+    heatmap_df = (
+        pairwise[pairwise["metric"].isin(PLOT_METRICS)]
+        .pivot(index="comparison_model", columns="metric", values="win_rate_for_gibbs")
+        .loc[COMPARISON_ORDER, list(PLOT_METRICS)]
+    )
+    heatmap_df = heatmap_df.rename(columns=METRIC_LABELS)
+
+    fig, ax = plt.subplots(figsize=(10.5, 4.8))
+    sns.heatmap(
+        heatmap_df,
+        vmin=0.0,
+        vmax=1.0,
+        center=0.5,
+        cmap="vlag",
+        annot=True,
+        fmt=".2f",
+        linewidths=0.7,
+        linecolor="white",
+        cbar_kws={"label": "Gibbs win rate"},
+        ax=ax,
+    )
+    ax.set_title("Gibbs win rate across repeated splits")
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    ax.tick_params(axis="x", rotation=25)
+    ax.tick_params(axis="y", rotation=0)
+    fig.tight_layout()
+    fig.savefig(
+        FIGURES_DIR / "repeated_split_gibbs_win_rate_heatmap.png",
         dpi=220,
         bbox_inches="tight",
     )
@@ -360,7 +575,10 @@ def main() -> None:
     summary.to_csv(TABLES_DIR / "repeated_split_summary.csv", index=False)
     pairwise.to_csv(TABLES_DIR / "repeated_split_pairwise.csv", index=False)
     plot_metric_distributions(raw)
+    plot_repeated_split_mean_ci(summary)
     plot_pairwise_differences(pairwise)
+    plot_pairwise_forest(pairwise)
+    plot_gibbs_win_rate_heatmap(pairwise)
 
     print("Repeated split comparison complete")
     print(

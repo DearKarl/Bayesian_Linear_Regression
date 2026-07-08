@@ -91,7 +91,20 @@ but it is a useful reminder that benchmark features need auditing.
 
 ## Figures
 
-![Model comparison](reports/figures/model_comparison.png)
+The repeated-split figures are the most informative for comparing near-tied
+models. They show that RMSE differences are not stable across splits, NLPD
+favors Bayesian Gibbs, CRPS favors RidgeCV and BayesianRidge, and interval score
+evidence is mixed across baselines.
+
+![Repeated split paired differences](reports/figures/repeated_split_pairwise_forest.png)
+
+![Repeated split model means and CIs](reports/figures/repeated_split_mean_ci.png)
+
+![Gibbs win rate heatmap](reports/figures/repeated_split_gibbs_win_rate_heatmap.png)
+
+![Fixed split probabilistic metrics](reports/figures/fixed_split_probabilistic_metrics.png)
+
+![Fixed split point metrics](reports/figures/fixed_split_point_metrics.png)
 
 ![Posterior predictions and intervals](reports/figures/predictions_and_intervals.png)
 
@@ -106,8 +119,6 @@ but it is a useful reminder that benchmark features need auditing.
 ![MCMC trace diagnostics](reports/figures/mcmc_trace_diagnostics.png)
 
 ![Repeated split metric distributions](reports/figures/repeated_split_metric_distributions.png)
-
-![Repeated split paired differences](reports/figures/repeated_split_pairwise_differences.png)
 
 ## Repository Layout
 
@@ -193,7 +204,12 @@ uncertainty and residual noise.
 | `reports/tables/bias_variance.csv` | Bootstrap bias-variance decomposition |
 | `reports/tables/legacy_feature_sensitivity.csv` | Full legacy features vs dropping `b` |
 | `reports/tables/test_predictions.csv` | Held-out Bayesian predictions and intervals |
+| `reports/figures/fixed_split_point_metrics.png` | Zoomed fixed-split RMSE and R2 dot plots |
+| `reports/figures/fixed_split_probabilistic_metrics.png` | Fixed-split NLPD, CRPS, interval score, and coverage comparison |
 | `reports/figures/mcmc_trace_diagnostics.png` | Trace plots for intercept, sigma2, and top coefficients |
+| `reports/figures/repeated_split_mean_ci.png` | Repeated-split metric means with 95% confidence intervals |
+| `reports/figures/repeated_split_pairwise_forest.png` | Forest plots of paired baseline-minus-Gibbs differences |
+| `reports/figures/repeated_split_gibbs_win_rate_heatmap.png` | Gibbs win rates across repeated splits and metrics |
 | `reports/figures/repeated_split_metric_distributions.png` | Distributions of RMSE, NLPD, CRPS, and interval score across splits |
 | `reports/figures/repeated_split_pairwise_differences.png` | Paired metric differences relative to Bayesian Gibbs |
 
