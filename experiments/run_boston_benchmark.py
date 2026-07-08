@@ -452,68 +452,137 @@ def _zoomed_axis_limits(
 
 
 def plot_model_comparison(summary: pd.DataFrame) -> None:
-    plot_df = _ordered_summary(summary)
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5.8), sharey=True)
-    metrics = ("rmse", "r2")
-    subtitles = {
-        "rmse": "Held-out RMSE, lower is better",
-        "r2": "Held-out R2, higher is better",
-    }
-    y_pos = np.arange(len(plot_df))
+    plot_df = summary.sort_values("rmse").reset_index(drop=True)
+    fig, ax = plt.subplots(figsize=(13.5, 5.6))
+    ax.set_axis_off()
+    ax.set_xlim(0.0, 1.0)
+    ax.set_ylim(-0.9, len(plot_df) + 1.0)
 
-    for ax, metric in zip(axes, metrics):
-        values = plot_df[metric].to_numpy()
-        baseline = values.min() if metric == "rmse" else values.max()
-        ax.hlines(
-            y_pos,
-            xmin=np.minimum(values, baseline),
-            xmax=np.maximum(values, baseline),
-            color="#C8CDD5",
-            linewidth=2.0,
-            zorder=1,
-        )
-        colors = [PALETTE[model] for model in plot_df["model"].astype(str)]
-        ax.scatter(
-            values,
-            y_pos,
-            color=colors,
-            s=95,
-            edgecolor="white",
-            linewidth=0.8,
-            zorder=2,
-        )
-        x_min, x_max = _zoomed_axis_limits(values)
-        ax.set_xlim(x_min, x_max)
-        offset = (x_max - x_min) * 0.018
-        for y_index, value in enumerate(values):
-            ha = "left"
-            x_text = value + offset
-            if x_text > x_max - offset:
-                ha = "right"
-                x_text = value - offset
-            ax.text(
-                x_text,
-                y_index,
-                f"{value:.3f}",
-                va="center",
-                ha=ha,
-                fontsize=10,
-                bbox=VALUE_LABEL_BBOX,
-            )
+    x_model = 0.07
+    x_rmse_value = 0.43
+    x_rmse_track = (0.51, 0.66)
+    x_r2_value = 0.76
+    x_r2_track = (0.84, 0.97)
+    header_y = len(plot_df) + 0.45
 
-        ax.set_title(subtitles[metric])
-        ax.set_xlabel(METRIC_LABELS[metric])
-        ax.set_yticks(y_pos)
-        ax.set_yticklabels(plot_df["model"])
-        ax.grid(True, axis="x", alpha=0.25)
-        ax.grid(False, axis="y")
-
-    axes[0].set_ylabel("")
-    fig.suptitle(
-        "Fixed-split point metrics: near-ties need a zoomed scale",
-        y=1.02,
-        fontsize=15,
+    ax.text(0.03, header_y, "Model", weight="bold", fontsize=13, va="center")
+    ax.text(x_rmse_value, header_y, "RMSE", weight="bold", fontsize=13, ha="right", va="center")
+    ax.text(
+        np.mean(x_rmse_track),
+        header_y,
+        "within-split range",
+        weight="bold",
+        fontsize=10,
+        ha="center",
+        va="center",
+        color="#6B7280",
     )
+    ax.text(x_r2_value, header_y, "R2", weight="bold", fontsize=13, ha="right", va="center")
+    ax.text(
+        np.mean(x_r2_track),
+        header_y,
+        "within-split range",
+        weight="bold",
+        fontsize=10,
+        ha="center",
+        va="center",
+        color="#6B7280",
+    )
+
+    rmse_values = plot_df["rmse"].to_numpy()
+    r2_values = plot_df["r2"].to_numpy()
+    rmse_low, rmse_high = float(rmse_values.min()), float(rmse_values.max())
+    r2_low, r2_high = float(r2_values.min()), float(r2_values.max())
+    rmse_span = rmse_high - rmse_low or 1.0
+    r2_span = r2_high - r2_low or 1.0
+
+    for row_index, row in plot_df.iterrows():
+        y_position = len(plot_df) - row_index - 1
+        model = str(row["model"])
+        color = PALETTE.get(model, "#333333")
+
+        ax.hlines(y_position - 0.45, 0.03, 0.97, color="#ECEFF3", linewidth=1.0)
+        ax.scatter(0.04, y_position, color=color, s=90, edgecolor="white", linewidth=0.7)
+        ax.text(x_model, y_position, model, fontsize=12.5, va="center")
+
+        rmse_weight = "bold" if np.isclose(row["rmse"], rmse_low) else "normal"
+        r2_weight = "bold" if np.isclose(row["r2"], r2_high) else "normal"
+        ax.text(
+            x_rmse_value,
+            y_position,
+            f"{row['rmse']:.3f}",
+            fontsize=12.5,
+            ha="right",
+            va="center",
+            weight=rmse_weight,
+        )
+        ax.text(
+            x_r2_value,
+            y_position,
+            f"{row['r2']:.3f}",
+            fontsize=12.5,
+            ha="right",
+            va="center",
+            weight=r2_weight,
+        )
+
+        rmse_position = x_rmse_track[0] + (row["rmse"] - rmse_low) / rmse_span * (
+            x_rmse_track[1] - x_rmse_track[0]
+        )
+        r2_position = x_r2_track[0] + (row["r2"] - r2_low) / r2_span * (
+            x_r2_track[1] - x_r2_track[0]
+        )
+        ax.plot(x_rmse_track, [y_position, y_position], color="#D5DAE1", linewidth=5)
+        ax.plot(x_r2_track, [y_position, y_position], color="#D5DAE1", linewidth=5)
+        ax.scatter(rmse_position, y_position, color=color, s=105, edgecolor="white", linewidth=0.8)
+        ax.scatter(r2_position, y_position, color=color, s=105, edgecolor="white", linewidth=0.8)
+
+    ax.text(
+        x_rmse_track[0],
+        -0.35,
+        "lower",
+        fontsize=9,
+        color="#6B7280",
+        ha="left",
+        va="center",
+    )
+    ax.text(
+        x_rmse_track[1],
+        -0.35,
+        "higher",
+        fontsize=9,
+        color="#6B7280",
+        ha="right",
+        va="center",
+    )
+    ax.text(
+        x_r2_track[0],
+        -0.35,
+        "lower",
+        fontsize=9,
+        color="#6B7280",
+        ha="left",
+        va="center",
+    )
+    ax.text(
+        x_r2_track[1],
+        -0.35,
+        "higher",
+        fontsize=9,
+        color="#6B7280",
+        ha="right",
+        va="center",
+    )
+    ax.text(
+        0.03,
+        -0.72,
+        "Values are shown in fixed columns; mini-bars use the observed fixed-split range and are not zero-based.",
+        fontsize=9.5,
+        color="#6B7280",
+        ha="left",
+        va="center",
+    )
+    fig.suptitle("Fixed-split point metrics", y=0.98, fontsize=16)
     fig.tight_layout()
     fig.savefig(FIGURES_DIR / "fixed_split_point_metrics.png", dpi=220, bbox_inches="tight")
     fig.savefig(FIGURES_DIR / "model_comparison.png", dpi=220, bbox_inches="tight")
