@@ -89,36 +89,104 @@ that drops it improves the Bayesian Gibbs test RMSE from 4.951 to 4.791 and
 raises 95% interval coverage from 94.1% to 96.1%. This is not a causal claim,
 but it is a useful reminder that benchmark features need auditing.
 
-## Figures
+## Reading The Results
 
-The repeated-split figures are the most informative for comparing near-tied
-models. They show that RMSE differences are not stable across splits, NLPD
-favors Bayesian Gibbs, CRPS favors RidgeCV and BayesianRidge, and interval score
-evidence is mixed across baselines.
+The figures below are organized around the research questions rather than shown
+as a gallery. Additional diagnostic and sensitivity figures are still saved
+under `reports/figures/`, but the README highlights only the plots that carry
+the main Part I conclusions.
 
-![Repeated split paired differences](reports/figures/repeated_split_pairwise_forest.png)
+### 1. Point Prediction
 
-![Repeated split model means and CIs](reports/figures/repeated_split_mean_ci.png)
+The first question is whether Bayesian linear regression improves ordinary
+point prediction on the fixed Boston Housing split. The comparison uses
+standard regression metrics such as
 
-![Gibbs win rate heatmap](reports/figures/repeated_split_gibbs_win_rate_heatmap.png)
+$$
+\operatorname{RMSE} =
+\sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}.
+$$
 
-![Fixed split probabilistic metrics](reports/figures/fixed_split_probabilistic_metrics.png)
+![Fixed split point metrics](reports/figures/model_comparison.png)
 
-![Fixed split point metrics](reports/figures/fixed_split_point_metrics.png)
+This fixed split does **not** support a strong point-prediction advantage for
+Bayesian Gibbs. OLS and Gibbs are effectively tied on RMSE, and the small
+differences among the linear models should be treated as descriptive rather
+than conclusive.
+
+### 2. Posterior Predictive Uncertainty
+
+The Bayesian model is valuable here because it models uncertainty around the
+prediction, not only the fitted mean. The custom Gibbs sampler uses the
+conjugate regression model
+
+$$
+y \mid X,\beta,\sigma^2 \sim \mathcal{N}(X\beta,\sigma^2 I),
+\quad
+\beta \sim \mathcal{N}(0,V_0),
+\quad
+\sigma^2 \sim \operatorname{InvGamma}(a_0,b_0).
+$$
+
+Posterior predictive intervals integrate over posterior draws of both
+coefficients and residual variance:
+
+$$
+p(\tilde{y}\mid \tilde{x},D)
+= \int p(\tilde{y}\mid \tilde{x},\beta,\sigma^2)
+  p(\beta,\sigma^2\mid D)\,d\beta\,d\sigma^2.
+$$
 
 ![Posterior predictions and intervals](reports/figures/predictions_and_intervals.png)
 
-![Posterior coefficient intervals](reports/figures/posterior_coefficients.png)
+The interval plot shows what the Bayesian model adds to a point estimate:
+prediction bands that express uncertainty for held-out observations. These
+intervals are useful even when RMSE is similar to OLS.
 
-![Tau sensitivity](reports/figures/tau_sensitivity.png)
+### 3. Probabilistic Scores
 
-![Small-data robustness](reports/figures/training_size_robustness.png)
+Because Bayesian Gibbs outputs a predictive distribution, Part I evaluates
+proper scoring rules in addition to RMSE. Negative log predictive density uses
 
-![Bias variance tradeoff](reports/figures/bias_variance_tradeoff.png)
+$$
+\operatorname{NLPD}
+= -\frac{1}{n}\sum_{i=1}^{n}\log p(y_i\mid x_i,D),
+$$
 
-![MCMC trace diagnostics](reports/figures/mcmc_trace_diagnostics.png)
+so lower values reward predictive distributions that assign higher probability
+to the observed targets.
 
-![Repeated split metric distributions](reports/figures/repeated_split_metric_distributions.png)
+![Fixed split probabilistic metrics](reports/figures/fixed_split_probabilistic_metrics.png)
+
+On the fixed split, Gibbs has the best NLPD and interval score, while CRPS is
+very close to RidgeCV and BayesianRidge. This motivates repeated-split
+comparison before making a stronger claim.
+
+### 4. Split Stability
+
+The repeated-split experiment asks whether model differences persist across
+random train/test splits. Pairwise differences are computed as
+
+$$
+\Delta_m = \operatorname{metric}_m - \operatorname{metric}_{\text{Gibbs}},
+$$
+
+so positive values favor Gibbs for lower-is-better metrics such as RMSE, NLPD,
+CRPS, and interval score.
+
+![Repeated split paired differences](reports/figures/repeated_split_pairwise_forest.png)
+
+The forest plot is the main stability result: RMSE confidence intervals cross
+zero for every baseline, so there is no stable point-prediction improvement.
+NLPD favors Gibbs across baselines, CRPS favors RidgeCV and BayesianRidge, and
+interval score evidence is mixed.
+
+![Gibbs win rate heatmap](reports/figures/repeated_split_gibbs_win_rate_heatmap.png)
+
+The win-rate heatmap gives the same message in a compact form. Gibbs wins often
+on NLPD, but not consistently on CRPS or RMSE. This is the current strongest
+interpretation: Bayesian posterior prediction improves some distributional
+scores, not point prediction in general.
 
 ## Repository Layout
 
@@ -204,7 +272,8 @@ uncertainty and residual noise.
 | `reports/tables/bias_variance.csv` | Bootstrap bias-variance decomposition |
 | `reports/tables/legacy_feature_sensitivity.csv` | Full legacy features vs dropping `b` |
 | `reports/tables/test_predictions.csv` | Held-out Bayesian predictions and intervals |
-| `reports/figures/fixed_split_point_metrics.png` | Zoomed fixed-split RMSE and R2 dot plots |
+| `reports/figures/model_comparison.png` | Fixed-split RMSE and R2 bar comparison |
+| `reports/figures/fixed_split_point_metrics.png` | Fixed-split RMSE and R2 bar comparison |
 | `reports/figures/fixed_split_probabilistic_metrics.png` | Fixed-split NLPD, CRPS, interval score, and coverage comparison |
 | `reports/figures/mcmc_trace_diagnostics.png` | Trace plots for intercept, sigma2, and top coefficients |
 | `reports/figures/repeated_split_mean_ci.png` | Repeated-split metric means with 95% confidence intervals |
