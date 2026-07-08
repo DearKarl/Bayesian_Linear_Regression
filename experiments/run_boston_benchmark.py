@@ -71,6 +71,12 @@ METRIC_LABELS = {
     "interval_score_95": "95% interval score",
     "coverage_95": "95% coverage",
 }
+VALUE_LABEL_BBOX = {
+    "facecolor": "white",
+    "edgecolor": "none",
+    "alpha": 0.82,
+    "pad": 1.6,
+}
 
 
 def ensure_dirs() -> None:
@@ -485,7 +491,15 @@ def plot_model_comparison(summary: pd.DataFrame) -> None:
             if x_text > x_max - offset:
                 ha = "right"
                 x_text = value - offset
-            ax.text(x_text, y_index, f"{value:.3f}", va="center", ha=ha, fontsize=10)
+            ax.text(
+                x_text,
+                y_index,
+                f"{value:.3f}",
+                va="center",
+                ha=ha,
+                fontsize=10,
+                bbox=VALUE_LABEL_BBOX,
+            )
 
         ax.set_title(subtitles[metric])
         ax.set_xlabel(METRIC_LABELS[metric])
@@ -544,7 +558,15 @@ def plot_fixed_split_probabilistic_metrics(summary: pd.DataFrame) -> None:
             if x_text > x_max - offset:
                 ha = "right"
                 x_text = value - offset
-            ax.text(x_text, y_index, f"{value:.3f}", va="center", ha=ha, fontsize=10)
+            ax.text(
+                x_text,
+                y_index,
+                f"{value:.3f}",
+                va="center",
+                ha=ha,
+                fontsize=10,
+                bbox=VALUE_LABEL_BBOX,
+            )
 
         ax.set_title(subtitles[metric])
         ax.set_xlabel(METRIC_LABELS[metric])
