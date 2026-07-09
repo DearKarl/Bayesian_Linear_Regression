@@ -42,16 +42,18 @@ deviations. Bayesian Gibbs uses posterior predictive samples.
 
 The custom Gibbs sampler uses a conjugate Bayesian linear regression model:
 
-![Bayesian linear model equation](assets/equations/bayesian_linear_model.svg)
+![Bayesian linear model equation](assets/equations/bayesian_linear_model.png)
 
 The sampler alternates between closed-form conditional draws of coefficients
 and residual variance. Posterior predictive samples then integrate over the
 joint posterior:
 
-![Posterior predictive equation](assets/equations/posterior_predictive.svg)
+![Posterior predictive equation](assets/equations/posterior_predictive.png)
 
 This is the main methodological difference from OLS: the model produces a
 predictive distribution, not only a fitted mean.
+
+![Posterior predictive intervals](../reports/figures/predictions_and_intervals.png)
 
 ## Experimental Design
 
@@ -92,7 +94,7 @@ this split, while CRPS is effectively tied with RidgeCV and BayesianRidge.
 Part I evaluates predictive distributions with proper scoring metrics. Negative
 log predictive density is:
 
-![NLPD equation](assets/equations/nlpd.svg)
+![NLPD equation](assets/equations/nlpd.png)
 
 Lower NLPD rewards predictive distributions that assign higher probability to
 observed targets. CRPS and interval score evaluate distributional calibration
@@ -113,7 +115,7 @@ stable across 30 random splits.
 
 Paired differences are computed as:
 
-![Paired difference equation](assets/equations/paired_difference.svg)
+![Paired difference equation](assets/equations/paired_difference.png)
 
 For lower-is-better metrics, positive values favor Gibbs. The 95% confidence
 intervals show:
@@ -142,17 +144,17 @@ constitute formal convergence evidence. Multi-chain R-hat remains future work.
 
 ## Interpretation
 
-The most defensible Part I conclusion is narrow:
+| Finding | Evidence | Interpretation |
+| --- | --- | --- |
+| No stable RMSE advantage | Repeated-split RMSE confidence intervals cross zero against every baseline | The current benchmark does not support a point-prediction improvement claim |
+| Repeated-split NLPD favors Gibbs | Gibbs has better paired NLPD differences against the current baselines | Posterior predictive density is the strongest Part I signal |
+| CRPS favors RidgeCV and BayesianRidge | Repeated-split CRPS differences are negative for these baselines | Gibbs does not dominate all probabilistic scores |
+| Interval score is mixed | Gibbs is favored against OLS and RidgeCV, but not clearly against BayesianRidge or ARDRegression | Interval quality depends on the baseline and scoring rule |
+| Gibbs remains useful | It provides posterior uncertainty, predictive intervals, and inspectable samples | Bayesian Gibbs is a useful uncertainty-aware research baseline |
 
-- Bayesian Gibbs does not show a stable RMSE advantage over OLS or other linear
-  baselines.
-- Bayesian Gibbs provides posterior predictive uncertainty and performs well on
-  NLPD across repeated splits.
-- CRPS does not support broad Gibbs dominance.
-- Interval-score evidence depends on the baseline.
-- The value of the Bayesian model here is uncertainty-aware prediction and a
-  transparent posterior inference workflow, not universal point-prediction
-  improvement.
+The safest Part I conclusion is that Bayesian Gibbs is valuable for posterior
+uncertainty and predictive density, not that it broadly outperforms ordinary
+least squares.
 
 ## Limitations
 
@@ -174,6 +176,21 @@ The most defensible Part I conclusion is narrow:
   repeated comparisons, and cautious interpretation.
 - Extend from scalar regression uncertainty to binary and structured risk
   estimation for AI-system outputs.
+
+## Reproduce Part I
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python scripts/render_equation_assets.py
+python experiments/run_boston_benchmark.py
+python experiments/run_repeated_split_comparison.py
+pytest -q
+```
+
+Use `--n-repeats` with `experiments/run_repeated_split_comparison.py` for a
+faster repeated-split smoke run.
 
 ## References
 

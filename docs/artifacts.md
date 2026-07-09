@@ -1,7 +1,8 @@
 # Artifact Inventory
 
-This page records generated files for reproducibility. The main README only
-highlights the figures needed to understand the current Part I conclusions.
+This page records generated files for reproducibility. The main README stays
+concise; detailed figures and equation assets are referenced from the relevant
+Part reports.
 
 ## Tables
 
@@ -45,10 +46,11 @@ highlights the figures needed to understand the current Part I conclusions.
 
 | File | Description |
 | --- | --- |
-| `docs/assets/equations/bayesian_linear_model.svg` | Bayesian linear regression model |
-| `docs/assets/equations/posterior_predictive.svg` | Posterior predictive distribution |
-| `docs/assets/equations/nlpd.svg` | Negative log predictive density |
-| `docs/assets/equations/paired_difference.svg` | Paired repeated-split difference |
-| `docs/assets/equations/hallucination_risk_target.svg` | Part II hallucination-risk target |
-| `docs/assets/equations/hallucination_risk_score.svg` | Bayesian hallucination-risk score |
-| `docs/assets/equations/bayesian_logistic_risk_model.svg` | Bayesian logistic hallucination-risk model |
+| `docs/assets/equations/bayesian_linear_model.svg` / `.png` | Bayesian linear regression model |
+| `docs/assets/equations/posterior_predictive.svg` / `.png` | Posterior predictive distribution |
+| `docs/assets/equations/nlpd.svg` / `.png` | Negative log predictive density |
+| `docs/assets/equations/paired_difference.svg` / `.png` | Paired repeated-split difference |
+| `docs/assets/equations/hallucination_risk_score.svg` / `.png` | Bayesian hallucination-risk score |
+| `docs/assets/equations/bayesian_logistic_risk_model.svg` / `.png` | Bayesian logistic hallucination-risk model |
+| `docs/assets/equations/binary_nll.svg` / `.png` | Binary negative log likelihood |
+| `docs/assets/equations/brier_score.svg` / `.png` | Brier score |

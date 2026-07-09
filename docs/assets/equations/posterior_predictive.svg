@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="316.62pt" height="67.38pt" viewBox="0 0 316.62 67.38" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="320.94pt" height="76.26pt" viewBox="0 0 320.94 76.26" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -20,17 +20,16 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 67.38
-L 316.62 67.38
-L 316.62 0
+   <path d="M 0 76.26
+L 320.94 76.26
+L 320.94 0
 L 0 0
-L 0 67.38
 z
-" style="fill: none; opacity: 0"/>
+" style="fill: #ffffff"/>
   </g>
   <g id="text_1">
    <!-- $p(\tilde{y}\mid \tilde{x},D)$ -->
-   <g style="fill: #111827" transform="translate(115.29 18.18) scale(0.18 -0.18)">
+   <g style="fill: #111827" transform="translate(117.45 20.34) scale(0.18 -0.18)">
     <defs>
      <path id="DejaVuSans-Oblique-70" d="M 3175 2156
 Q 3175 2616 2975 2859
@@ -197,7 +196,7 @@ z
   </g>
   <g id="text_2">
    <!-- $= \int p(\tilde{y}\mid \tilde{x},\beta,\sigma^2)\,p(\beta,\sigma^2\mid D)\,d\beta\,d\sigma^2$ -->
-   <g style="fill: #111827" transform="translate(3.6 58.2) scale(0.18 -0.18)">
+   <g style="fill: #111827" transform="translate(5.76 64.92) scale(0.18 -0.18)">
     <defs>
      <path id="DejaVuSans-3d" d="M 678 2906
 L 4684 2906

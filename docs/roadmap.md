@@ -1,47 +1,40 @@
 # Roadmap
 
-This roadmap keeps Bayesian Methods Lab PR-sized and research-question driven.
-The near-term direction is Bayesian hallucination-risk modeling for language
-and multimodal AI systems, built on the uncertainty-reporting discipline from
-Part I.
+## Completed: Part I Foundation
 
-## 1. Part I Cleanup
+- Bayesian regression benchmark.
+- Probabilistic scoring.
+- MCMC diagnostics.
+- Repeated-split comparison.
+- README / Part I documentation cleanup.
 
-- Keep Bayesian Regression Foundations as the completed foundation study.
-- Preserve existing Boston Housing numeric results.
-- Keep formulas and essential figures rendering correctly in documentation.
-- Avoid claiming broad Bayesian superiority from the Part I benchmark.
+## Next: Part II Bayesian Hallucination Risk Modeling
 
-## 2. Part II Hallucination-Risk Documentation Scaffold
+Milestones:
 
-- Define the text-only hallucination-risk target.
-- Specify a first Bayesian logistic risk model.
-- List candidate evidence and uncertainty features.
-- Define evaluation metrics for probabilistic binary risk prediction.
-- Connect the text-only scaffold to future multimodal uncertainty work.
+1. Part II documentation scaffold.
+2. Text-only hallucination-risk dataset prototype.
+3. Feature extraction for uncertainty, consistency, and evidence.
+4. Bayesian logistic risk model.
+5. Calibration metrics: NLL, Brier, ECE, AUROC, AUPRC.
+6. Risk-coverage analysis.
 
-## 3. Text-Only Hallucination-Risk Prototype
+## Planned: Part III Multimodal Hallucination Uncertainty
 
-- Add a small reproducible text-only hallucination-risk dataset or synthetic
-  benchmark.
-- Implement transparent feature extraction for prompt, answer, and evidence.
-- Fit baseline logistic regression and a Bayesian logistic risk model.
-- Report NLL / binary NLPD, Brier score, AUROC, AUPRC, calibration, ECE, and
-  risk-coverage.
-- Avoid strong claims until repeated splits or external benchmarks support
-  them.
+Milestones:
 
-## 4. Multimodal Hallucination Uncertainty Prototype
+1. Choose multimodal hallucination benchmarks.
+2. Define hallucination types.
+3. Extract visual grounding / evidence features.
+4. Fit hierarchical Bayesian risk models.
+5. Evaluate by hallucination type and dataset.
 
-- Add a compact image-text or multimodal verification benchmark.
-- Define grounding, contradiction, and missing-evidence features.
-- Compare text-only and multimodal risk features.
-- Report calibration and risk-coverage, not only classification accuracy.
+## Planned: Part IV Bayesian Abstention and Decision Rules
 
-## 5. Bayesian Abstention And Decision-Rule Experiments
+Milestones:
 
-- Convert hallucination-risk posteriors into abstention or escalation policies.
-- Compare fixed thresholds, posterior-interval rules, and expected-utility
-  decision rules.
-- Evaluate residual hallucination risk versus answer coverage.
-- Document when Bayesian uncertainty changes the downstream decision.
+1. Define actions: answer, abstain, verify, regenerate.
+2. Define decision costs.
+3. Compare posterior-mean thresholds with credible-upper-bound thresholds.
+4. Evaluate selective risk and coverage.
+5. Study practical reliability trade-offs.
