@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="242.1pt" height="24.620625pt" viewBox="0 0 242.1 24.620625" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="246.42pt" height="28.940625pt" viewBox="0 0 246.42 28.940625" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -20,17 +20,16 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 24.620625
-L 242.1 24.620625
-L 242.1 0
+   <path d="M 0 28.940625
+L 246.42 28.940625
+L 246.42 0
 L 0 0
-L 0 24.620625
 z
-" style="fill: none; opacity: 0"/>
+" style="fill: #ffffff"/>
   </g>
   <g id="text_1">
    <!-- $\Delta_m = \mathrm{metric}_m - \mathrm{metric}_{\mathrm{Gibbs}}$ -->
-   <g style="fill: #111827" transform="translate(3.6 17.277187) scale(0.18 -0.18)">
+   <g style="fill: #111827" transform="translate(5.76 19.437187) scale(0.18 -0.18)">
     <defs>
      <path id="DejaVuSans-394" d="M 2188 4044
 L 906 525

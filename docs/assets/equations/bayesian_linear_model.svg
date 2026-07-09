@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="211.32pt" height="104.58pt" viewBox="0 0 211.32 104.58" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="215.64pt" height="118.26pt" viewBox="0 0 215.64 118.26" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -20,17 +20,16 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 104.58
-L 211.32 104.58
-L 211.32 0
-L 0 0
-L 0 104.58
+   <path d="M -0 118.26
+L 215.64 118.26
+L 215.64 0
+L -0 0
 z
-" style="fill: none; opacity: 0"/>
+" style="fill: #ffffff"/>
   </g>
   <g id="text_1">
    <!-- $y \mid X,\beta,\sigma^2 \sim \mathcal{N}(X\beta,\sigma^2 I)$ -->
-   <g style="fill: #111827" transform="translate(4.59 19.98) scale(0.18 -0.18)">
+   <g style="fill: #111827" transform="translate(6.75 22.14) scale(0.18 -0.18)">
     <defs>
      <path id="DejaVuSans-Oblique-79" d="M 1588 -325
 Q 1188 -997 936 -1164
@@ -282,7 +281,7 @@ z
   </g>
   <g id="text_2">
    <!-- $\beta \sim \mathcal{N}(0,V_0)$ -->
-   <g style="fill: #111827" transform="translate(52.47 57.78) scale(0.18 -0.18)">
+   <g style="fill: #111827" transform="translate(54.63 64.62) scale(0.18 -0.18)">
     <defs>
      <path id="DejaVuSans-30" d="M 2034 4250
 Q 1547 4250 1301 3770
@@ -329,7 +328,7 @@ z
   </g>
   <g id="text_3">
    <!-- $\sigma^2 \sim \mathrm{InvGamma}(a_0,b_0)$ -->
-   <g style="fill: #111827" transform="translate(3.6 97.236563) scale(0.18 -0.18)">
+   <g style="fill: #111827" transform="translate(5.76 108.756563) scale(0.18 -0.18)">
     <defs>
      <path id="DejaVuSans-49" d="M 628 4666
 L 1259 4666

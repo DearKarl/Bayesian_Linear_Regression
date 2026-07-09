@@ -1,7 +1,9 @@
-"""Render equation SVG assets for GitHub-friendly documentation.
+"""Render equation assets for GitHub-friendly documentation.
 
 The script uses matplotlib mathtext rather than external LaTeX so it can run in
-standard Python environments without a TeX installation.
+standard Python environments without a TeX installation. Each equation is saved
+as both SVG and PNG; documentation should prefer PNG when SVG rendering is
+unreliable.
 """
 
 from __future__ import annotations
@@ -18,45 +20,52 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = REPO_ROOT / "docs" / "assets" / "equations"
 
 EQUATIONS = {
-    "bayesian_linear_model.svg": [
+    "bayesian_linear_model": [
         r"$y \mid X,\beta,\sigma^2 \sim \mathcal{N}(X\beta,\sigma^2 I)$",
         r"$\beta \sim \mathcal{N}(0,V_0)$",
         r"$\sigma^2 \sim \mathrm{InvGamma}(a_0,b_0)$",
     ],
-    "posterior_predictive.svg": [
+    "posterior_predictive": [
         r"$p(\tilde{y}\mid \tilde{x},D)$",
         r"$= \int p(\tilde{y}\mid \tilde{x},\beta,\sigma^2)"
         r"\,p(\beta,\sigma^2\mid D)\,d\beta\,d\sigma^2$",
     ],
-    "nlpd.svg": [
+    "nlpd": [
         r"$\mathrm{NLPD} = -\frac{1}{n}\sum_{i=1}^{n}"
         r"\log p(y_i\mid x_i,D)$",
     ],
-    "paired_difference.svg": [
+    "paired_difference": [
         r"$\Delta_m = \mathrm{metric}_m - \mathrm{metric}_{\mathrm{Gibbs}}$",
     ],
-    "hallucination_risk_target.svg": [
-        r"$P(H=1\mid q,a,e,u)$",
-        r"$q:\ \mathrm{prompt},\quad a:\ \mathrm{answer},\quad"
-        r" e:\ \mathrm{evidence},\quad u:\ \mathrm{uncertainty\ features}$",
+    "hallucination_risk_score": [
+        r"$P(H=1\mid \mathrm{prompt},\mathrm{answer},"
+        r"\mathrm{evidence},\mathrm{uncertainty\ features})$",
     ],
-    "hallucination_risk_score.svg": [
-        r"$r(x)=\mathbb{E}_{\theta\mid D}"
-        r"\left[P(H=1\mid x,\theta)\right]$",
-    ],
-    "bayesian_logistic_risk_model.svg": [
-        r"$H_i\sim\mathrm{Bernoulli}(\pi_i)$",
-        r"$\mathrm{logit}(\pi_i)=\alpha+x_i^\top\beta$",
+    "bayesian_logistic_risk_model": [
+        r"$H_i\sim\mathrm{Bernoulli}(r_i)$",
+        r"$\mathrm{logit}(r_i)=\alpha+z_i^\top w$",
         r"$\alpha\sim\mathcal{N}(0,\sigma_\alpha^2),\quad"
-        r"\beta_j\sim\mathcal{N}(0,\tau^2)$",
+        r"w_j\sim\mathcal{N}(0,\tau^2)$",
+    ],
+    "binary_nll": [
+        r"$\mathrm{NLL}=-\frac{1}{n}\sum_{i=1}^{n}"
+        r"\left[y_i\log r_i+(1-y_i)\log(1-r_i)\right]$",
+    ],
+    "brier_score": [
+        r"$\mathrm{Brier}=\frac{1}{n}\sum_{i=1}^{n}(r_i-y_i)^2$",
     ],
 }
 
 
-def render_equation(filename: str, lines: list[str]) -> None:
-    height = 0.5 + 0.55 * len(lines)
-    fig = plt.figure(figsize=(8.0, height), dpi=160)
-    fig.patch.set_alpha(0.0)
+def _strip_trailing_whitespace(path: Path) -> None:
+    path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+
+
+def render_equation(name: str, lines: list[str]) -> None:
+    height = 0.55 + 0.62 * len(lines)
+    fig = plt.figure(figsize=(8.8, height), dpi=180)
+    fig.patch.set_facecolor("white")
+
     for index, line in enumerate(lines):
         y_position = 1.0 - (index + 1) / (len(lines) + 1)
         fig.text(
@@ -68,28 +77,30 @@ def render_equation(filename: str, lines: list[str]) -> None:
             fontsize=18,
             color="#111827",
         )
-    output_path = OUTPUT_DIR / filename
-    fig.savefig(
-        output_path,
-        format="svg",
-        transparent=True,
-        bbox_inches="tight",
-        pad_inches=0.05,
-        metadata={"Date": None},
-    )
+
+    for extension in ("svg", "png"):
+        output_path = OUTPUT_DIR / f"{name}.{extension}"
+        fig.savefig(
+            output_path,
+            format=extension,
+            facecolor=fig.get_facecolor(),
+            transparent=False,
+            bbox_inches="tight",
+            pad_inches=0.08,
+            metadata={"Date": None} if extension == "svg" else {"Software": "matplotlib"},
+        )
+        if extension == "svg":
+            _strip_trailing_whitespace(output_path)
+
     plt.close(fig)
-    output_path.write_text(
-        "\n".join(line.rstrip() for line in output_path.read_text().splitlines())
-        + "\n"
-    )
 
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     matplotlib.rcParams["svg.hashsalt"] = "bayesian-methods-lab"
-    for filename, lines in EQUATIONS.items():
-        render_equation(filename, lines)
-    print(f"Rendered {len(EQUATIONS)} equation assets to {OUTPUT_DIR}")
+    for name, lines in EQUATIONS.items():
+        render_equation(name, lines)
+    print(f"Rendered {len(EQUATIONS)} equations as SVG and PNG to {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":

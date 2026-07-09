@@ -1,107 +1,101 @@
 # Part II: Bayesian Hallucination Risk Modeling
 
-Part II moves Bayesian Methods Lab from foundational regression uncertainty
-toward uncertainty-aware risk modeling for language and multimodal AI systems.
-This document is a scaffold only: it defines the research direction and first
-modeling target without adding datasets, experiments, or new inference code.
+Part II is a documentation scaffold for the next research direction. It does
+not add hallucination datasets, multimodal code, or new Bayesian inference
+implementations yet.
 
 ## Research Question
 
-Can Bayesian methods estimate the probability that an AI-generated answer is
-unsupported, contradicted, or otherwise hallucinated, while also quantifying
-uncertainty about that risk estimate?
+Can Bayesian risk modeling estimate calibrated hallucination probabilities for
+language-model answers?
 
-The aim is not only to classify outputs as correct or hallucinated. The research
-goal is to produce calibrated risk estimates that can support downstream
-decisions such as abstention, retrieval escalation, human review, or answer
-revision.
+## Motivation
+
+Part I studied posterior predictive uncertainty for regression. Part II
+transfers that idea to language-model reliability: instead of predicting a
+continuous target, the model estimates whether an answer is hallucinated.
+
+The target is not only a binary detector. The goal is a calibrated posterior
+risk estimate that can later support abstention, verification, regeneration, or
+human review.
 
 ## Target Quantity
 
-The first target is a conditional hallucination-risk probability:
+The Bayesian hallucination-risk score is:
 
-![Hallucination risk target](assets/equations/hallucination_risk_target.svg)
+![Bayesian hallucination risk score](assets/equations/hallucination_risk_score.png)
 
-Here `H = 1` denotes a hallucinated or unsupported answer, `q` is the prompt,
-`a` is the model answer, `e` is retrieved or provided evidence, and `u` denotes
-uncertainty-related features extracted from the generation and verification
-pipeline.
+Here `H = 1` means the answer is hallucinated or unsupported. The conditioning
+information includes the prompt, answer, available evidence, and uncertainty
+features extracted from generation or verification. The target is a calibrated
+posterior risk, not just a hard hallucination label.
 
-## Bayesian Hallucination Risk Score
+## First Bayesian Model
 
-A Bayesian risk model should report a posterior predictive risk score rather
-than a single deterministic classifier score:
+The first model should be intentionally simple, like Part I:
 
-![Bayesian hallucination risk score](assets/equations/hallucination_risk_score.svg)
+![Bayesian logistic hallucination risk model](assets/equations/bayesian_logistic_risk_model.png)
 
-This score averages over posterior uncertainty in model parameters. In later
-experiments, posterior intervals around this score can be used to separate
-confidently safe, confidently risky, and uncertain cases.
+Here `z_i` contains uncertainty, consistency, and evidence features. Posterior
+samples over `alpha` and `w` induce uncertainty over hallucination risk. This
+keeps calibration and interpretation inspectable before moving to multimodal
+systems.
 
 ## Candidate Evidence Features
 
-Initial text-only features should be simple, inspectable, and reproducible:
+Initial text-only features should be transparent and reproducible:
 
-- retrieval similarity between the answer and supporting evidence;
-- entailment or contradiction scores from a verifier model;
-- answer-evidence coverage, including unsupported claims;
-- generation uncertainty such as token entropy or sequence log probability;
-- self-consistency disagreement across sampled answers;
-- citation availability, citation overlap, or source reliability features;
-- prompt type, answer length, and domain indicators;
-- missing-evidence flags for questions where retrieval fails.
-
-These features are candidates, not fixed commitments. The first implementation
-should favor transparent features over large hidden representations so that
-calibration and failure modes are easier to inspect.
-
-## First Bayesian Logistic Risk Model
-
-The first Part II model can be a Bayesian logistic regression risk model:
-
-![Bayesian logistic hallucination risk model](assets/equations/bayesian_logistic_risk_model.svg)
-
-This model is intentionally modest. It extends the Part I logic from continuous
-regression uncertainty to binary risk estimation while keeping coefficients,
-posterior intervals, and calibration diagnostics interpretable.
-
-Potential model variants for later PRs include:
-
-- hierarchical priors by dataset, task type, or domain;
-- sparse priors for selecting reliable evidence features;
-- robust likelihood or label-noise extensions for imperfect hallucination
-  annotations;
-- Bayesian ensembles or posterior predictive mixtures over verifier features.
+- token or sequence uncertainty;
+- self-consistency disagreement;
+- semantic disagreement across sampled answers;
+- retrieval support score;
+- verifier or judge score;
+- answer length;
+- claim count;
+- contradiction or entailment score from an evidence checker.
 
 ## Evaluation Metrics
 
 Part II should evaluate probabilistic risk estimates, not only binary accuracy.
+Binary NLL is the classification analogue of NLPD from Part I:
+
+![Binary NLL equation](assets/equations/binary_nll.png)
+
+Brier score measures squared probability error and is useful for calibration:
+
+![Brier score equation](assets/equations/brier_score.png)
+
 Candidate metrics include:
 
 | Metric | Purpose |
 | --- | --- |
-| NLL / binary NLPD | Rewards calibrated probability assigned to the observed hallucination label |
+| Negative log likelihood / binary NLPD | Rewards calibrated probability assigned to the observed hallucination label |
 | Brier score | Measures squared probability error and calibration quality |
 | AUROC | Evaluates ranking of hallucinated versus non-hallucinated outputs |
 | AUPRC | Focuses on positive hallucination cases when labels are imbalanced |
 | Calibration curve | Visualizes predicted risk versus observed hallucination frequency |
-| ECE | Summarizes expected calibration error across confidence bins |
-| Risk-coverage | Measures how abstention or escalation changes residual hallucination risk |
+| Expected calibration error | Summarizes calibration error across confidence bins |
+| Risk-coverage curve | Measures how abstention or escalation changes residual hallucination risk |
 
-The main claim standard should remain cautious: a model should be described as
-better only when probabilistic scores, calibration, and risk-coverage evidence
-support that conclusion.
+## Minimal Prototype Plan
 
-## Connection To Multimodal Hallucination Uncertainty
+1. Start with text-only hallucination or factuality labels.
+2. Extract uncertainty and evidence features from model outputs.
+3. Fit a Bayesian logistic risk model.
+4. Compare against uncalibrated heuristics and frequentist logistic regression.
+5. Evaluate calibration and selective risk.
+6. Only then extend to multimodal hallucination uncertainty.
 
-Part II is the text-first bridge to Part III. The same target can later be
-extended from language-only evidence to multimodal evidence:
+## Connection To Part III
 
-- image-answer consistency for visual question answering;
-- grounding between generated captions and visual regions;
-- audio/video evidence alignment for temporal claims;
-- modality-specific uncertainty features;
-- cross-modal contradiction and missing-evidence indicators.
+Part III will extend the same risk idea to multimodal hallucination, including
+object, attribute, relation, counting, OCR, and visual-reasoning failures. The
+text-only Part II scaffold should therefore keep the target, metrics, and
+decision framing compatible with multimodal grounding evidence.
 
-The long-term direction is a Bayesian risk layer that estimates when generated
-outputs should be trusted, abstained, verified, or routed to human review.
+## Limitations
+
+- Hallucination labels are noisy.
+- LLM-as-judge signals are not ground truth.
+- Calibration can be dataset-specific.
+- Text-only Part II is a stepping stone toward multimodal settings.
