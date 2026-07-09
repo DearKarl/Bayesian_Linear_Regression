@@ -7,6 +7,12 @@
 - MCMC diagnostics.
 - Repeated-split comparison.
 - README / Part I documentation cleanup.
+- Part III and Part IV documentation scaffolds.
+
+Follow-up:
+
+- Audit Part I sampler and written prior consistency in a dedicated PR before
+  any paper-style release.
 
 ## Next: Part II Bayesian Hallucination Risk Modeling
 

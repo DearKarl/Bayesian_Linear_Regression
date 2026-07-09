@@ -53,6 +53,11 @@ joint posterior:
 This is the main methodological difference from OLS: the model produces a
 predictive distribution, not only a fitted mean.
 
+Mathematical consistency note: the current Part I sampler and written prior
+specification should be audited in a dedicated follow-up PR to ensure the
+documented conjugate prior exactly matches the implemented Gibbs conditionals.
+This PR does not change the sampler or saved results.
+
 ![Posterior predictive intervals](../reports/figures/predictions_and_intervals.png)
 
 ## Experimental Design
