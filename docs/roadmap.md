@@ -1,71 +1,47 @@
 # Roadmap
 
-This roadmap keeps future work PR-sized and research-question driven. The goal
-is to grow Bayesian Methods Lab without losing reproducibility or overstating
-results.
+This roadmap keeps Bayesian Methods Lab PR-sized and research-question driven.
+The near-term direction is Bayesian hallucination-risk modeling for language
+and multimodal AI systems, built on the uncertainty-reporting discipline from
+Part I.
 
-## 1. Documentation-First Project Reframing
+## 1. Part I Cleanup
 
-- Reframe the repository as Bayesian Methods Lab.
-- Keep the Boston Housing benchmark as Part I: Bayesian Regression Foundations.
-- Add repository rules, research questions, and this roadmap.
-- Do not change current numeric results.
+- Keep Bayesian Regression Foundations as the completed foundation study.
+- Preserve existing Boston Housing numeric results.
+- Keep formulas and essential figures rendering correctly in documentation.
+- Avoid claiming broad Bayesian superiority from the Part I benchmark.
 
-## 2. Probabilistic Scoring Metrics
+## 2. Part II Hallucination-Risk Documentation Scaffold
 
-- Add log predictive density or negative log predictive density.
-- Add interval coverage and interval width summaries across repeated splits.
-- Consider CRPS if the predictive distribution interface supports it cleanly.
-- Keep RMSE and MAE as point-prediction baselines, not the only metrics.
+- Define the text-only hallucination-risk target.
+- Specify a first Bayesian logistic risk model.
+- List candidate evidence and uncertainty features.
+- Define evaluation metrics for probabilistic binary risk prediction.
+- Connect the text-only scaffold to future multimodal uncertainty work.
 
-## 3. MCMC Diagnostics
+## 3. Text-Only Hallucination-Risk Prototype
 
-- Add trace plots for selected coefficients and residual variance.
-- Report effective sample size and autocorrelation diagnostics.
-- Add lightweight convergence checks for the custom Gibbs sampler.
-- Save diagnostic figures under `reports/figures/`.
+- Add a small reproducible text-only hallucination-risk dataset or synthetic
+  benchmark.
+- Implement transparent feature extraction for prompt, answer, and evidence.
+- Fit baseline logistic regression and a Bayesian logistic risk model.
+- Report NLL / binary NLPD, Brier score, AUROC, AUPRC, calibration, ECE, and
+  risk-coverage.
+- Avoid strong claims until repeated splits or external benchmarks support
+  them.
 
-## 4. Repeated-Split Statistical Comparison
+## 4. Multimodal Hallucination Uncertainty Prototype
 
-- Run repeated train/test splits for OLS, RidgeCV, BayesianRidge,
-  ARDRegression, and Bayesian Gibbs.
-- Report means, standard deviations, confidence intervals, and paired
-  differences.
-- Only claim predictive improvement if repeated-split evidence supports it.
+- Add a compact image-text or multimodal verification benchmark.
+- Define grounding, contradiction, and missing-evidence features.
+- Compare text-only and multimodal risk features.
+- Report calibration and risk-coverage, not only classification accuracy.
 
-## 5. PyMC/NUTS Implementation
+## 5. Bayesian Abstention And Decision-Rule Experiments
 
-- Reimplement the Part I Bayesian linear regression model in PyMC.
-- Compare posterior summaries from Gibbs sampling and NUTS.
-- Use the same preprocessing and train/test splits for fair comparison.
-
-## 6. Student-t Robust Regression
-
-- Add a Student-t likelihood for robust Bayesian regression.
-- Evaluate behavior under outliers and target capping.
-- Compare point metrics, interval calibration, and residual diagnostics.
-
-## 7. Horseshoe Sparse Regression
-
-- Add a horseshoe-prior regression experiment.
-- Compare sparse posterior shrinkage with ARDRegression and BayesianRidge.
-- Report feature relevance with uncertainty intervals.
-
-## 8. Hierarchical Regression
-
-- Introduce a dataset or synthetic setting with meaningful groups.
-- Compare pooled, unpooled, and partially pooled regression.
-- Emphasize small-sample behavior and uncertainty propagation.
-
-## 9. Gaussian Process or BART
-
-- Add one nonlinear Bayesian regression method.
-- Compare against linear Bayesian baselines on the same metrics.
-- Focus on calibrated nonlinear prediction rather than raw RMSE alone.
-
-## 10. Bayesian Inverse Problem Toy Example
-
-- Add a small engineering-mathematics inverse problem.
-- Demonstrate prior design, likelihood construction, posterior inference, and
-  uncertainty propagation.
-- Keep the example compact enough to reproduce from a single experiment script.
+- Convert hallucination-risk posteriors into abstention or escalation policies.
+- Compare fixed thresholds, posterior-interval rules, and expected-utility
+  decision rules.
+- Evaluate residual hallucination risk versus answer coverage.
+- Document when Bayesian uncertainty changes the downstream decision.

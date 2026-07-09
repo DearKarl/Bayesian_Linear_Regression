@@ -35,6 +35,21 @@ EQUATIONS = {
     "paired_difference.svg": [
         r"$\Delta_m = \mathrm{metric}_m - \mathrm{metric}_{\mathrm{Gibbs}}$",
     ],
+    "hallucination_risk_target.svg": [
+        r"$P(H=1\mid q,a,e,u)$",
+        r"$q:\ \mathrm{prompt},\quad a:\ \mathrm{answer},\quad"
+        r" e:\ \mathrm{evidence},\quad u:\ \mathrm{uncertainty\ features}$",
+    ],
+    "hallucination_risk_score.svg": [
+        r"$r(x)=\mathbb{E}_{\theta\mid D}"
+        r"\left[P(H=1\mid x,\theta)\right]$",
+    ],
+    "bayesian_logistic_risk_model.svg": [
+        r"$H_i\sim\mathrm{Bernoulli}(\pi_i)$",
+        r"$\mathrm{logit}(\pi_i)=\alpha+x_i^\top\beta$",
+        r"$\alpha\sim\mathcal{N}(0,\sigma_\alpha^2),\quad"
+        r"\beta_j\sim\mathcal{N}(0,\tau^2)$",
+    ],
 }
 
 

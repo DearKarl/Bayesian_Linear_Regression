@@ -34,7 +34,6 @@ highlights the figures needed to understand the current Part I conclusions.
 | `reports/figures/mcmc_trace_diagnostics.png` | Trace plots for intercept, sigma2, and top coefficients |
 | `reports/figures/repeated_split_mean_ci.png` | Repeated-split metric means with 95% confidence intervals |
 | `reports/figures/repeated_split_pairwise_forest.png` | Paired metric differences relative to Bayesian Gibbs |
-| `reports/figures/repeated_split_gibbs_win_rate_heatmap.png` | Gibbs win rates across metrics and baselines |
 | `reports/figures/repeated_split_metric_distributions.png` | Repeated-split metric distributions |
 | `reports/figures/repeated_split_pairwise_differences.png` | Earlier paired-difference visualization retained for comparison |
 | `reports/figures/tau_sensitivity.png` | Prior-variance sensitivity curve |
@@ -50,3 +49,6 @@ highlights the figures needed to understand the current Part I conclusions.
 | `docs/assets/equations/posterior_predictive.svg` | Posterior predictive distribution |
 | `docs/assets/equations/nlpd.svg` | Negative log predictive density |
 | `docs/assets/equations/paired_difference.svg` | Paired repeated-split difference |
+| `docs/assets/equations/hallucination_risk_target.svg` | Part II hallucination-risk target |
+| `docs/assets/equations/hallucination_risk_score.svg` | Bayesian hallucination-risk score |
+| `docs/assets/equations/bayesian_logistic_risk_model.svg` | Bayesian logistic hallucination-risk model |

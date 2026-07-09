@@ -500,42 +500,6 @@ def plot_pairwise_forest(pairwise: pd.DataFrame) -> None:
     plt.close(fig)
 
 
-def plot_gibbs_win_rate_heatmap(pairwise: pd.DataFrame) -> None:
-    heatmap_df = (
-        pairwise[pairwise["metric"].isin(PLOT_METRICS)]
-        .pivot(index="comparison_model", columns="metric", values="win_rate_for_gibbs")
-        .loc[COMPARISON_ORDER, list(PLOT_METRICS)]
-    )
-    heatmap_df = heatmap_df.rename(columns=METRIC_LABELS)
-
-    fig, ax = plt.subplots(figsize=(10.5, 4.8))
-    sns.heatmap(
-        heatmap_df,
-        vmin=0.0,
-        vmax=1.0,
-        center=0.5,
-        cmap="vlag",
-        annot=True,
-        fmt=".2f",
-        linewidths=0.7,
-        linecolor="white",
-        cbar_kws={"label": "Gibbs win rate"},
-        ax=ax,
-    )
-    ax.set_title("Gibbs win rate across repeated splits")
-    ax.set_xlabel("")
-    ax.set_ylabel("")
-    ax.tick_params(axis="x", rotation=25)
-    ax.tick_params(axis="y", rotation=0)
-    fig.tight_layout()
-    fig.savefig(
-        FIGURES_DIR / "repeated_split_gibbs_win_rate_heatmap.png",
-        dpi=220,
-        bbox_inches="tight",
-    )
-    plt.close(fig)
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Repeated train/test split comparison for Boston Housing models."
@@ -578,7 +542,6 @@ def main() -> None:
     plot_repeated_split_mean_ci(summary)
     plot_pairwise_differences(pairwise)
     plot_pairwise_forest(pairwise)
-    plot_gibbs_win_rate_heatmap(pairwise)
 
     print("Repeated split comparison complete")
     print(

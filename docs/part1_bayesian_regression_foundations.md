@@ -126,10 +126,6 @@ intervals show:
 
 ![Repeated split paired differences](../reports/figures/repeated_split_pairwise_forest.png)
 
-The Gibbs win-rate heatmap gives a compact view of the same evidence.
-
-![Gibbs win rate heatmap](../reports/figures/repeated_split_gibbs_win_rate_heatmap.png)
-
 ## MCMC Diagnostics
 
 The repository includes lightweight single-chain diagnostics for the custom
@@ -172,8 +168,20 @@ The most defensible Part I conclusion is narrow:
 
 ## Next Steps
 
-- Add probabilistic inference engine comparisons, especially PyMC/NUTS.
-- Add robust Student-t regression.
-- Add sparse priors such as horseshoe regression.
-- Add hierarchical regression for grouped data.
-- Add a Bayesian inverse-problem or calibration toy example.
+- Use Part I as the uncertainty-aware baseline for later Bayesian risk models.
+- Move next toward Bayesian hallucination-risk modeling for language systems.
+- Reuse the Part I evaluation discipline: probabilistic scores, calibration,
+  repeated comparisons, and cautious interpretation.
+- Extend from scalar regression uncertainty to binary and structured risk
+  estimation for AI-system outputs.
+
+## References
+
+- scikit-learn,
+  [BayesianRidge](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.BayesianRidge.html)
+  and
+  [ARDRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.ARDRegression.html).
+- scikit-learn example,
+  [Comparing Linear Bayesian Regressors](https://scikit-learn.org/stable/auto_examples/linear_model/plot_ard.html).
+- Harrison, D. and Rubinfeld, D. L. (1978).
+  [Hedonic housing prices and the demand for clean air](https://doi.org/10.1016/0095-0696(78)90006-2).
