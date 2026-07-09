@@ -21,4 +21,8 @@ Bayesian Methods Lab is a research project dedicated to Bayesian methods for rel
 
 - **Part IV: Bayesian Abstention and Decision Rules** studies how Bayesian posterior risk can guide reliable decision making in generative AI systems. Instead of using uncertainty only for prediction, this part investigates Bayesian decision rules for answering, abstaining, verification, regeneration, and human review. The objective is to transform calibrated posterior uncertainty into practical decision strategies for trustworthy language and multimodal AI systems.
 
+## Repository Navigation
+
+## Long-Term Research Goals
+
 ## References
