@@ -1,105 +1,63 @@
 # Bayesian Methods Lab
 
-Bayesian Methods Lab is a Python research workspace for studying Bayesian
-modeling, posterior inference, uncertainty quantification, and robust
-prediction. The repository is organized as a sequence of research parts. Each
-part keeps its detailed question, methods, equations, experiments, figures, and
-interpretation in `docs/`, while this README stays as the lab index.
+Bayesian Methods Lab studies how Bayesian reasoning can make AI systems more
+uncertainty-aware, calibrated, and decision-conscious. The lab begins with
+Bayesian regression foundations and then moves toward Bayesian
+hallucination-risk modeling for language and multimodal systems.
 
-## Research Directory
+## Research Parts
 
-| Part | Theme | Status | Research Entry |
+| Part | Theme | Status | Entry Point |
 | --- | --- | --- | --- |
-| I | Bayesian Regression Foundations | Current | [Part I report](docs/part1_bayesian_regression_foundations.md) |
-| II | Probabilistic Inference Engines | Planned | Compare custom Gibbs with PyMC/NUTS or related HMC workflows |
-| III | Robust And Sparse Regression | Planned | Study Student-t likelihoods, sparse priors, and outlier robustness |
-| IV | Hierarchical And Nonparametric Models | Planned | Extend to grouped data, Gaussian processes, and BART-style models |
-| V | Engineering-Mathematics Applications | Planned | Explore Bayesian calibration, inverse problems, and simulation uncertainty |
+| I | Bayesian Regression Foundations | Completed foundation study | [Part I report](docs/part1_bayesian_regression_foundations.md) |
+| II | Bayesian Hallucination Risk Modeling | Next | [Part II scaffold](docs/part2_bayesian_hallucination_risk_modeling.md) |
+| III | Multimodal Hallucination Uncertainty | Planned | Future text-image/audio-video uncertainty experiments |
+| IV | Bayesian Abstention and Decision Rules | Planned | Future risk-aware abstention and escalation experiments |
 
-The current repository implements Part I. Later parts should be added as new
-documents and experiments without turning the README into a full report.
+## Current Foundation Study
 
-## Current Study
+Part I is a controlled foundation study before the lab moves to
+hallucination-risk modeling. It keeps the model class simple so that posterior
+prediction, probabilistic scoring, and uncertainty diagnostics can be inspected
+cleanly.
 
-**Part I: Bayesian Regression Foundations** asks what posterior inference adds
-beyond ordinary least squares on a compact tabular regression benchmark.
-
-| Component | Part I Design |
+| Component | Part I Summary |
 | --- | --- |
 | Dataset | Legacy Boston Housing, with an explicit ethical note |
-| Models | OLS, RidgeCV, BayesianRidge, ARDRegression, custom Bayesian Gibbs |
-| Inference focus | Posterior coefficients, residual variance, and posterior predictive samples |
-| Scores | RMSE, MAE, R2, coverage, NLPD, CRPS, 95% interval score |
-| Stability check | 30 repeated train/test splits with paired differences |
+| Models | Ordinary least squares, RidgeCV, BayesianRidge, ARDRegression, custom Bayesian Gibbs |
+| Bayesian focus | Posterior coefficients, residual variance, and posterior predictive samples |
+| Evaluation | RMSE, MAE, R2, coverage, NLPD, CRPS, and 95% interval score |
+| Stability check | 30 repeated train/test splits with paired baseline-minus-Gibbs differences |
 | Diagnostics | Lightweight single-chain ESS, autocorrelation, and trace plots |
 
-The central Bayesian object is the posterior predictive distribution. Equation
-assets are rendered as SVG images so that GitHub displays them reliably without
-unsupported README math macros.
-
-![Bayesian linear model](docs/assets/equations/bayesian_linear_model.svg)
-
-![Posterior predictive distribution](docs/assets/equations/posterior_predictive.svg)
+Detailed model equations, experiment settings, and figures are kept in the
+Part I report rather than displayed on the README.
 
 ## Current Findings
 
-| Research Question | Evidence So Far | Interpretation |
+| Finding | Evidence So Far | Interpretation |
 | --- | --- | --- |
-| Does Gibbs improve point prediction? | Repeated-split RMSE confidence intervals cross zero against every baseline | No stable RMSE advantage |
-| Does posterior prediction improve density scoring? | Repeated-split NLPD favors Bayesian Gibbs | Gibbs assigns better predictive density in this benchmark |
-| Does Gibbs dominate all probabilistic scores? | CRPS favors RidgeCV and BayesianRidge; interval score is mixed | No broad dominance claim is supported |
-| Why keep the Bayesian model? | It provides posterior uncertainty, predictive intervals, and inspectable samples | Valuable as an uncertainty-aware research baseline |
+| No stable RMSE advantage | Repeated-split RMSE confidence intervals cross zero against every baseline | The current benchmark does not support a point-prediction improvement claim |
+| Repeated-split NLPD favors Gibbs | Gibbs has better paired NLPD differences against the current baselines | Posterior predictive density is the strongest Part I signal |
+| CRPS favors RidgeCV and BayesianRidge | Repeated-split CRPS differences are negative for these baselines | Gibbs does not dominate all probabilistic scores |
+| Interval score is mixed | Gibbs is favored against OLS and RidgeCV, but not clearly against BayesianRidge or ARDRegression | Interval quality depends on the baseline and scoring rule |
+| Gibbs remains useful | It provides posterior uncertainty, predictive intervals, and inspectable samples | Bayesian Gibbs is a useful uncertainty-aware research baseline |
 
-The safest conclusion is deliberately narrow: Bayesian Gibbs is competitive on
-point prediction and useful for posterior uncertainty and predictive density,
-but the current evidence does not show a general RMSE improvement over OLS.
-
-## Key Visual Evidence
-
-### 1. Posterior Predictive Uncertainty
-
-This figure answers what the Bayesian model adds beyond a fitted mean. Each
-held-out prediction is shown with a posterior predictive interval, combining
-coefficient uncertainty and residual noise.
-
-![Posterior predictions and intervals](reports/figures/predictions_and_intervals.png)
-
-The intervals make uncertainty visible even when point metrics are nearly tied.
-This is the main practical reason to keep the custom Gibbs sampler as the first
-Bayesian baseline.
-
-### 2. Repeated-Split Paired Evidence
-
-This forest plot answers whether single-split differences are stable. The x-axis
-is baseline metric minus Gibbs metric; for lower-is-better scores, positive
-values favor Gibbs. Confidence intervals crossing zero indicate unstable or
-inconclusive differences.
-
-![Repeated-split paired differences](reports/figures/repeated_split_pairwise_forest.png)
-
-The result is mixed: RMSE is not stable, NLPD favors Gibbs, CRPS favors
-RidgeCV/BayesianRidge, and interval score depends on the baseline.
-
-### 3. Gibbs Win Rates
-
-This heatmap gives a compact view of how often Gibbs wins across repeated
-splits and metrics.
-
-![Gibbs win-rate heatmap](reports/figures/repeated_split_gibbs_win_rate_heatmap.png)
-
-It reinforces the same interpretation: Gibbs often wins on NLPD, but not
-consistently on RMSE or CRPS.
+The safest Part I conclusion is that Bayesian Gibbs is valuable for posterior
+uncertainty and predictive density, not that it broadly outperforms ordinary
+least squares.
 
 ## How To Navigate The Lab
 
 | Need | Go To |
 | --- | --- |
-| Full Part I research narrative | [docs/part1_bayesian_regression_foundations.md](docs/part1_bayesian_regression_foundations.md) |
-| Future research themes | [docs/research_questions.md](docs/research_questions.md) |
-| PR-sized milestone plan | [docs/roadmap.md](docs/roadmap.md) |
+| Full Part I regression study | [docs/part1_bayesian_regression_foundations.md](docs/part1_bayesian_regression_foundations.md) |
+| Part II hallucination-risk scaffold | [docs/part2_bayesian_hallucination_risk_modeling.md](docs/part2_bayesian_hallucination_risk_modeling.md) |
+| Research questions by part | [docs/research_questions.md](docs/research_questions.md) |
+| PR-sized roadmap | [docs/roadmap.md](docs/roadmap.md) |
 | Dataset ethics and benchmark caveats | [docs/dataset_note.md](docs/dataset_note.md) |
 
-## Reproduce
+## Reproduce Part I
 
 ```bash
 python -m venv .venv
@@ -114,23 +72,18 @@ pytest -q
 Use `--n-repeats` with `experiments/run_repeated_split_comparison.py` for a
 faster repeated-split smoke run.
 
-## Development Notes
+## Contributor Notes
 
-- Keep the Python package name `bayeslinreg` until a dedicated package-rename
-  PR is planned.
-- Keep generated tables in `reports/tables/` and figures in `reports/figures/`.
-- Add future work as new research parts with concise README links and detailed
-  documents under `docs/`.
-- Avoid strong claims unless repeated-split or external-benchmark evidence
-  supports them.
+- Keep experiments reproducible with deterministic seeds, saved outputs, and
+  explicit validation commands.
+- Avoid strong claims without repeated-split, external-benchmark, or
+  task-specific calibration evidence.
+- Keep generated outputs under `reports/tables/` and `reports/figures/`.
+- Keep the package name `bayeslinreg` until a dedicated rename PR.
 
 ## References
 
-- scikit-learn,
-  [BayesianRidge](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.BayesianRidge.html)
-  and
-  [ARDRegression](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.ARDRegression.html).
-- scikit-learn example,
-  [Comparing Linear Bayesian Regressors](https://scikit-learn.org/stable/auto_examples/linear_model/plot_ard.html).
-- Harrison, D. and Rubinfeld, D. L. (1978).
-  [Hedonic housing prices and the demand for clean air](https://doi.org/10.1016/0095-0696(78)90006-2).
+Detailed Part I references are listed in the
+[Part I report](docs/part1_bayesian_regression_foundations.md). Future
+hallucination-risk references should be added to the relevant Part II document
+rather than expanded into a long README bibliography.
