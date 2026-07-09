@@ -1,10 +1,10 @@
 # Bayesian Methods Lab
 
-Bayesian Methods Lab investigates Bayesian approaches to uncertainty,
-calibration, and risk modeling in reliable AI. The lab uses Bayesian regression
-as a foundation and develops toward hallucination-risk estimation, multimodal
-uncertainty, and Bayesian decision rules for language and vision-language
-systems.
+Bayesian Methods Lab explores Bayesian approaches to uncertainty
+quantification, calibration, and risk-aware decision making in reliable AI. The
+lab uses Bayesian regression as a controlled foundation and develops toward
+hallucination-risk estimation, multimodal uncertainty modeling, and Bayesian
+decision rules for language and vision-language systems.
 
 ## Research Parts
 
@@ -12,8 +12,8 @@ systems.
 | --- | --- | --- |
 | [Part I](docs/part1_bayesian_regression_foundations.md) | Bayesian Regression Foundations | Completed foundation study |
 | [Part II](docs/part2_bayesian_hallucination_risk_modeling.md) | Bayesian Hallucination Risk Modeling | Next |
-| Part III | Multimodal Hallucination Uncertainty | Planned |
-| Part IV | Bayesian Abstention and Decision Rules | Planned |
+| [Part III](docs/part3_multimodal_hallucination_uncertainty.md) | Multimodal Hallucination Uncertainty | Planned |
+| [Part IV](docs/part4_bayesian_abstention_decision_rules.md) | Bayesian Abstention and Decision Rules | Planned |
 
 Part I establishes the workflow for posterior prediction, probabilistic scoring,
 and uncertainty diagnostics. Part II transfers these ideas to
@@ -38,6 +38,8 @@ hallucination.
 | --- | --- |
 | Completed Bayesian regression foundation study | [Part I report](docs/part1_bayesian_regression_foundations.md) |
 | Next hallucination-risk research plan | [Part II scaffold](docs/part2_bayesian_hallucination_risk_modeling.md) |
+| Planned multimodal hallucination direction | [Part III scaffold](docs/part3_multimodal_hallucination_uncertainty.md) |
+| Planned Bayesian decision-rule direction | [Part IV scaffold](docs/part4_bayesian_abstention_decision_rules.md) |
 | Lab-wide research questions | [Research questions](docs/research_questions.md) |
 | Development roadmap | [Roadmap](docs/roadmap.md) |
 | Boston Housing ethics and benchmark caveats | [Dataset note](docs/dataset_note.md) |
@@ -50,5 +52,5 @@ smoke run.
 
 References are organized by research part. See the
 [Part I report](docs/part1_bayesian_regression_foundations.md) for the current
-regression-foundation references; hallucination-risk references will be
-collected in the Part II report.
+regression-foundation references; hallucination-risk references are collected
+in the relevant later Part documents as those studies mature.
