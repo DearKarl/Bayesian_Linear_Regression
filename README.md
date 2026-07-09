@@ -11,36 +11,14 @@ Bayesian Methods Lab is a research project dedicated to Bayesian methods for rel
 | Part III | Multimodal Hallucination Uncertainty | Planned | Coming Soon |
 | Part IV | Bayesian Abstention and Decision Rules | Planned | Coming Soon |
 
-## Current Status
+## Research Overview
 
-Part I is complete as a controlled foundation study. It shows that Bayesian
-Gibbs regression is competitive on point prediction and useful for posterior
-uncertainty and predictive density, but it does not provide stable evidence of
-general RMSE improvement over ordinary least squares.
+- **Part I: Bayesian Regression Foundations** establishes the methodological foundation of the laboratory. This study investigates how Bayesian posterior inference differs from classical point estimation in a controlled regression setting. It focuses on posterior prediction, probabilistic scoring, uncertainty quantification, and Bayesian diagnostics to build a reproducible baseline before moving to more complex AI applications.
 
-The next stage is Part II: Bayesian Hallucination Risk Modeling, where the lab
-will study calibrated posterior risk estimates for language-model
-hallucination.
+- **Part II: Bayesian Hallucination Risk Modeling** transfers Bayesian uncertainty modeling from regression to large language models. The objective is to develop Bayesian methods for estimating calibrated hallucination risk by integrating posterior inference with uncertainty signals, consistency measurements, and external evidence. Rather than treating hallucination detection as a binary classification problem, this part aims to model hallucination as a probabilistic posterior risk.
 
-## Navigate
+- **Part III: Multimodal Hallucination Uncertainty** extends the Bayesian risk modeling framework to multimodal large language models. This study investigates how Bayesian methods can quantify uncertainty when language generation must be grounded in images, documents, charts, or other modalities. The long-term goal is to understand different categories of hallucination and to build calibrated uncertainty models that remain reliable across multimodal tasks.
 
-| Looking for... | Go to |
-| --- | --- |
-| Completed Bayesian regression foundation study | [Part I report](docs/part1_bayesian_regression_foundations.md) |
-| Next hallucination-risk research plan | [Part II scaffold](docs/part2_bayesian_hallucination_risk_modeling.md) |
-| Planned multimodal hallucination direction | [Part III scaffold](docs/part3_multimodal_hallucination_uncertainty.md) |
-| Planned Bayesian decision-rule direction | [Part IV scaffold](docs/part4_bayesian_abstention_decision_rules.md) |
-| Lab-wide research questions | [Research questions](docs/research_questions.md) |
-| Development roadmap | [Roadmap](docs/roadmap.md) |
-| Boston Housing ethics and benchmark caveats | [Dataset note](docs/dataset_note.md) |
-
-Reproduction commands are listed inside each Part report. Use `--n-repeats`
-with `experiments/run_repeated_split_comparison.py` for a faster repeated-split
-smoke run.
+- **Part IV: Bayesian Abstention and Decision Rules** studies how Bayesian posterior risk can guide reliable decision making in generative AI systems. Instead of using uncertainty only for prediction, this part investigates Bayesian decision rules for answering, abstaining, verification, regeneration, and human review. The objective is to transform calibrated posterior uncertainty into practical decision strategies for trustworthy language and multimodal AI systems.
 
 ## References
-
-References are organized by research part. See the
-[Part I report](docs/part1_bayesian_regression_foundations.md) for the current
-regression-foundation references; hallucination-risk references are collected
-in the relevant later Part documents as those studies mature.
