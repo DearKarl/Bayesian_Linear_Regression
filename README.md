@@ -1,39 +1,19 @@
 # Bayesian Methods Lab
 
-*From Bayesian uncertainty to reliable multimodal AI.*
+*Toward Reliable Multimodal LLM.*
 
-Bayesian Methods Lab is a long-term research project on Bayesian approaches to
-uncertainty quantification, calibration, and risk-aware decision making in
-reliable AI. The lab studies how Bayesian posterior inference can support
-hallucination quantification, calibrated confidence, and trustworthy decisions
-in language and vision-language systems.
+Bayesian Methods Lab is a research project dedicated to Bayesian methods for reliable multimodal large language models. Our research investigates how Bayesian posterior inference can be used to quantify hallucination, calibrate predictive confidence, and support uncertainty-aware decision making.
 
-## Research Philosophy
-
-The laboratory starts from research questions rather than model preferences.
-Bayesian methods are studied because they provide a principled language for
-posterior uncertainty, predictive calibration, and decision making under
-uncertainty. Each research part is designed to be independently reproducible,
-and every conclusion must be supported by empirical evidence.
+## Research Goal 
 
 The goal is not to prove that Bayesian methods universally outperform classical
 or deterministic approaches. The goal is to identify when Bayesian posterior
 inference provides measurable value, how that value should be evaluated, and how
 uncertainty can inform safer AI-system behavior.
 
-## Why Bayesian?
+## Introduction
 
-Modern large language models often produce fluent answers without clearly
-communicating how reliable those answers are. This creates a gap between
-generation quality and decision reliability. Bayesian methods are worth studying
-because they treat uncertainty as a central object of inference rather than an
-afterthought.
-
-For reliable AI systems, calibrated uncertainty should influence downstream
-actions. A model should not only produce an answer; it should also estimate when
-that answer may be unsupported, contradicted, or unsafe to use without further
-verification. Bayesian posterior inference provides one principled framework
-for connecting prediction, uncertainty, and decision making.
+Modern large language models often generate responses that appear confident even when they are factually unsupported. Reliable AI systems therefore require mechanisms that estimate uncertainty before decisions are made. Bayesian methods provide a principled framework for posterior inference, enabling hallucination to be represented as a calibrated probabilistic risk rather than a binary prediction.
 
 ## Research Roadmap
 
@@ -77,8 +57,6 @@ for connecting prediction, uncertainty, and decision making.
   uncertainty into practical decision strategies for trustworthy language and
   multimodal AI systems.
 
-## Research Workflow
-
 ```text
 Posterior Inference
         |
@@ -92,8 +70,7 @@ Hallucination Risk Modeling
 Decision Making
 ```
 
-The four parts are not independent projects. They form a single research
-pipeline: Part I establishes reproducible posterior inference and probabilistic
+Part I establishes reproducible posterior inference and probabilistic
 evaluation; Part II applies those ideas to hallucination risk in language-model
 outputs; Part III extends the risk framework to multimodal grounding failures;
 and Part IV studies how posterior risk should guide actions.
