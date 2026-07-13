@@ -32,7 +32,7 @@ drops this feature. See [dataset_note.md](dataset_note.md) for context.
 | RidgeCV | `sklearn.linear_model.RidgeCV` | Frequentist shrinkage baseline |
 | BayesianRidge | `sklearn.linear_model.BayesianRidge` | Empirical Bayes baseline with predictive standard deviations |
 | ARDRegression | `sklearn.linear_model.ARDRegression` | Sparse empirical Bayes baseline |
-| Bayesian Gibbs | `src/bayeslinreg/models.py` | Custom conjugate Gibbs sampler |
+| Bayesian Gibbs | `src/bayeslinreg/models.py` | Custom Gibbs sampler |
 
 OLS and RidgeCV use residual-normal predictive baselines for distributional
 scores. BayesianRidge and ARDRegression use scikit-learn predictive standard
@@ -40,18 +40,81 @@ deviations. Bayesian Gibbs uses posterior predictive samples.
 
 ## Bayesian Model Formulation
 
-The custom Gibbs sampler uses a conjugate Bayesian linear regression model:
+The custom Gibbs sampler is documented through the following Bayesian linear
+regression specification:
 
-![Bayesian linear model equation](assets/equations/bayesian_linear_model.png)
+```math
+\begin{aligned}
+\mathbf{y}
+\mid
+X,\boldsymbol{\beta},\sigma^2
+&\sim
+\mathcal{N}
+\left(
+X\boldsymbol{\beta},
+\sigma^2 I
+\right), \\[4pt]
+\boldsymbol{\beta}
+&\sim
+\mathcal{N}
+\left(
+\mathbf{0},
+V_0
+\right), \\[4pt]
+\sigma^2
+&\sim
+\mathrm{InvGamma}
+\left(
+a_0,b_0
+\right).
+\end{aligned}
+```
+
+Here, $\mathbf{y}$ is the response vector, $X$ is the design matrix,
+$\boldsymbol{\beta}$ is the coefficient vector, and $\sigma^2$ is the residual
+variance. The matrix $V_0$ specifies the coefficient-prior covariance, while
+$a_0$ and $b_0$ are the inverse-gamma hyperparameters.
 
 The sampler alternates between closed-form conditional draws of coefficients
 and residual variance. Posterior predictive samples then integrate over the
-joint posterior:
+joint posterior. For observed training data $D$, a new predictor vector
+$\widetilde{x}$, and its associated future response $\widetilde{y}$, the
+posterior predictive distribution is
 
-![Posterior predictive equation](assets/equations/posterior_predictive.png)
+```math
+p
+\left(
+\widetilde{y}
+\mid
+\widetilde{x},D
+\right)
+=
+\int
+p
+\left(
+\widetilde{y}
+\mid
+\widetilde{x},
+\boldsymbol{\beta},
+\sigma^2
+\right)
+p
+\left(
+\boldsymbol{\beta},
+\sigma^2
+\mid
+D
+\right)
+\,
+d\boldsymbol{\beta}
+\,
+d\sigma^2 .
+```
 
-This is the main methodological difference from OLS: the model produces a
-predictive distribution, not only a fitted mean.
+This distribution integrates coefficient uncertainty and residual uncertainty
+rather than conditioning on a single fitted parameter vector. This is the main
+methodological difference from OLS: the model produces a predictive
+distribution, not only a fitted mean.
 
 Mathematical consistency note: the current Part I sampler and written prior
 specification should be audited in a dedicated follow-up PR to ensure the
@@ -97,13 +160,27 @@ this split, while CRPS is effectively tied with RidgeCV and BayesianRidge.
 ## Probabilistic Scoring
 
 Part I evaluates predictive distributions with proper scoring metrics. Negative
-log predictive density is:
+log predictive density is defined as
 
-![NLPD equation](assets/equations/nlpd.png)
+```math
+\mathrm{NLPD}
+=
+-\frac{1}{n}
+\sum_{i=1}^{n}
+\log
+p
+\left(
+y_i
+\mid
+x_i,D
+\right).
+```
 
-Lower NLPD rewards predictive distributions that assign higher probability to
-observed targets. CRPS and interval score evaluate distributional calibration
-and sharpness from complementary angles.
+Here, $n$ is the number of test observations, $x_i$ is the predictor vector for
+observation $i$, and $y_i$ is its observed response. Lower NLPD is better
+because it indicates that the predictive distribution assigns greater
+probability density to the observed response. CRPS and interval score evaluate
+distributional calibration and sharpness from complementary angles.
 
 ## Repeated-Split Results
 
@@ -118,11 +195,30 @@ stable across 30 random splits.
 | ARDRegression | 4.935 | 3.023 | 2.575 | 29.988 |
 | Bayesian Gibbs | 4.924 | 3.015 | 2.577 | 29.932 |
 
-Paired differences are computed as:
+For a comparison model $m$ and repeated train/test split $s$, the paired
+difference for a lower-is-better metric is defined as
 
-![Paired difference equation](assets/equations/paired_difference.png)
+```math
+\Delta_{m,s}
+=
+L_{m,s}
+-
+L_{\mathrm{Gibbs},s},
+```
 
-For lower-is-better metrics, positive values favor Gibbs. The 95% confidence
+and its mean across splits is
+
+```math
+\overline{\Delta}_{m}
+=
+\frac{1}{S}
+\sum_{s=1}^{S}
+\Delta_{m,s}.
+```
+
+Here, $S$ is the total number of splits and $L_{m,s}$ is the metric value for
+model $m$ on split $s$. A positive value of $\overline{\Delta}_{m}$ favors
+Bayesian Gibbs for RMSE, NLPD, CRPS, and interval score. The 95% confidence
 intervals show:
 
 - RMSE differences cross zero for every baseline;
@@ -188,7 +284,6 @@ least squares.
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python scripts/render_equation_assets.py
 python experiments/run_boston_benchmark.py
 python experiments/run_repeated_split_comparison.py
 pytest -q
