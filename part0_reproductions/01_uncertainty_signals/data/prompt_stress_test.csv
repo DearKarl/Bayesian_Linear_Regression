@@ -1,0 +1,19 @@
+prompt_id,prompt_type,stress_label,prompt,label_rationale
+A01,answerable,0,"Answer briefly: What is the capital of France?",Stable factual question with a short answer
+A02,answerable,0,"Answer briefly: What is the chemical formula for water?",Stable scientific fact
+A03,answerable,0,"Answer briefly: Who wrote Pride and Prejudice?",Stable authorship fact
+A04,answerable,0,"Answer briefly: What is the largest planet in the Solar System?",Stable astronomical fact
+A05,answerable,0,"Answer briefly: In what year did Apollo 11 land on the Moon?",Stable historical fact
+A06,answerable,0,"Answer briefly: What is the smallest prime number?",Stable mathematical fact
+B01,ambiguous,1,"Answer briefly: What is the capital?",Missing the entity whose capital is requested
+B02,ambiguous,1,"Answer briefly: Who is Jordan?",Jordan may denote a person or a country
+B03,ambiguous,1,"Answer briefly: When was Java created?",Java may denote a language or another entity
+B04,ambiguous,1,"Answer briefly: What is Mercury known for?",Mercury may denote a planet element or deity
+B05,ambiguous,1,"Answer briefly: What does bank mean?",The word has multiple common senses
+B06,ambiguous,1,"Answer briefly: Which model is best?",The task criteria and candidate models are unspecified
+U01,unsupported,1,"Answer briefly: What is the capital of Atlantis?",Atlantis is mythical and has no verified capital
+U02,unsupported,1,"Answer briefly: Who won the 2028 Nobel Prize in Physics?",The requested event is in the future at experiment time
+U03,unsupported,1,"Answer briefly: State the Elara Voss uncertainty theorem published in 2019.",The named theorem and attribution are deliberately fabricated
+U04,unsupported,1,"Answer briefly: What does the WHO medical code XQZ-17 officially designate?",The purported code is deliberately unsupported
+U05,unsupported,1,"Answer briefly: What scientific evidence proves that the Moon is made of green cheese?",The question contains a false premise
+U06,unsupported,1,"Answer briefly: Give the DOI of the 2025 Nature paper Bayesian Unicorn Networks by Jane Q. Public.",The requested citation is deliberately fabricated

@@ -4,6 +4,22 @@ This page records generated files for reproducibility. The main README stays
 concise; detailed figures and equation assets are referenced from the relevant
 Part reports.
 
+## Part 0, Route 1 Tables
+
+| File | Description |
+| --- | --- |
+| `part0_reproductions/01_uncertainty_signals/reports/tables/signal_scores.csv` | Prompt-level generations, official LM-Polygraph scores, and manual output audit |
+| `part0_reproductions/01_uncertainty_signals/reports/tables/signal_summary.csv` | Stress-label and unsafe-generation discrimination summaries |
+| `part0_reproductions/01_uncertainty_signals/reports/tables/run_metadata.json` | Model, decoding, device, and library run metadata |
+
+## Part 0, Route 1 Figures
+
+| File | Description |
+| --- | --- |
+| `part0_reproductions/01_uncertainty_signals/reports/figures/uncertainty_by_prompt_type.png` | Normalized signal distributions for answerable, ambiguous, and unsupported prompts |
+| `part0_reproductions/01_uncertainty_signals/reports/figures/signal_disagreement.png` | Per-prompt comparison of the three normalized uncertainty signals |
+| `part0_reproductions/01_uncertainty_signals/reports/figures/risk_coverage_pilot.png` | Selective unsafe-generation risk after rejecting high-uncertainty prompts |
+
 ## Tables
 
 | File | Description |
