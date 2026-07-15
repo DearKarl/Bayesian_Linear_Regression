@@ -1,5 +1,14 @@
 # Research Questions
 
+## Part 0: Reproduction and Evidence Map
+
+- Which published uncertainty and hallucination results remain reproducible
+  across software versions, model families, datasets, and compute budgets?
+- Which methods estimate prompt difficulty, which estimate output error, and
+  which produce calibrated probabilities rather than uncalibrated scores?
+- Where do author-code results, paper-derived implementations, and new
+  laboratory baselines agree or diverge?
+
 ## Part I: Bayesian Regression Foundations
 
 - What does posterior prediction add beyond ordinary least squares in a
@@ -13,6 +22,8 @@
 - Which uncertainty and evidence signals are predictive of hallucination?
 - Does Bayesian calibration improve NLL, Brier score, ECE, and risk-coverage
   over heuristic scores?
+- Can label noise and dependence among uncertainty, retrieval, and verifier
+  signals be represented explicitly rather than ignored?
 
 ## Part III: Multimodal Hallucination Uncertainty
 
@@ -30,3 +41,5 @@
   thresholds?
 - What is the trade-off between answer coverage, hallucination rate, and
   utility?
+- When is the expected value of clarification, retrieval, tool use, another
+  agent, or human review greater than its cost?

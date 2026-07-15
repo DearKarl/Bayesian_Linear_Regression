@@ -1,12 +1,26 @@
 # Roadmap
 
-## Completed: Part I Foundation
+## Active: Part 0 Reproduction and Evidence Map
+
+- Six-route literature and reproduction structure established.
+- Route 1 official LM-Polygraph estimator pilot completed.
+- Prompt-level stress labels separated from manually audited generation labels.
+
+Next Route 1 milestones:
+
+1. Replace the diagnostic prompt set with claim-level factuality benchmarks.
+2. Add sampling-based semantic entropy and semantic-volume comparisons.
+3. Evaluate several text-only open-weight model families and decoding settings.
+4. Report calibration, compute cost, and risk--coverage with uncertainty intervals.
+
+## Completed: Part I Predictive Foundation
 
 - Bayesian regression benchmark.
 - Probabilistic scoring.
 - MCMC diagnostics.
 - Repeated-split comparison.
-- README / Part I documentation cleanup.
+- Part I reframed as the Bayesian predictive foundation for the doctoral programme.
+- README expanded into a linked multi-level research map.
 - Part III and Part IV documentation scaffolds.
 
 Follow-up:
@@ -14,7 +28,7 @@ Follow-up:
 - Audit Part I sampler and written prior consistency in a dedicated PR before
   any paper-style release.
 
-## Next: Part II Bayesian Hallucination Risk Modeling
+## Next Original-Method Study: Part II Bayesian Hallucination Risk Modeling
 
 Milestones:
 
@@ -24,6 +38,7 @@ Milestones:
 4. Bayesian logistic risk model.
 5. Calibration metrics: NLL, Brier, ECE, AUROC, AUPRC.
 6. Risk-coverage analysis.
+7. Explicit observation models for noisy labels and correlated evidence signals.
 
 ## Planned: Part III Multimodal Hallucination Uncertainty
 
